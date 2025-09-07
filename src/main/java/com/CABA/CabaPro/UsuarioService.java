@@ -15,7 +15,7 @@ public class UsuarioService {
         return ADMIN_PASSWORD.equals(contrasena);
     }
 
-    public Usuario crearUsuario(String nombre, String contrasena) throws Exception {
+    public Usuario crearUsuario(String nombre, String contrasena, String email) throws Exception {
         for (Usuario u : usuarios) {
             if (u.getNombre().equals(nombre)) {
                 throw new Exception("El nombre de usuario ya existe");
@@ -25,6 +25,7 @@ public class UsuarioService {
         usuario.setId(nextId++);
         usuario.setNombre(nombre);
         usuario.setContrasena(contrasena);
+        usuario.setEmail(email);
         usuarios.add(usuario);
         return usuario;
     }

@@ -19,8 +19,9 @@
 <body>
     <div class="container">
         <h2>Crear Usuario</h2>
-        <input type="text" id="nombre" placeholder="Nombre de usuario">
-        <input type="password" id="contrasena" placeholder="Contraseña">
+    <input type="text" id="nombre" placeholder="Nombre de usuario">
+    <input type="email" id="email" placeholder="Correo electrónico">
+    <input type="password" id="contrasena" placeholder="Contraseña">
         <button onclick="crearUsuario()">Registrar</button>
         <div id="msgRegistro" class="msg"></div>
         <div class="small-link">
@@ -30,11 +31,12 @@
     <script>
         function crearUsuario() {
             const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
             const contrasena = document.getElementById('contrasena').value;
             fetch('/usuarios/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, contrasena })
+                body: JSON.stringify({ nombre, email, contrasena })
             })
             .then(res => res.json())
             .then(data => {

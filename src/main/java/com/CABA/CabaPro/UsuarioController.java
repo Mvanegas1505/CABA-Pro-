@@ -29,7 +29,7 @@ public class UsuarioController {
     @PostMapping("/crear")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         try {
-            return usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena());
+            return usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena(), usuario.getEmail());
         } catch (Exception e) {
             Usuario error = new Usuario();
             error.setNombre("ERROR: " + e.getMessage());
