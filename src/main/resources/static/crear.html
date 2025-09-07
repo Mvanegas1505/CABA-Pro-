@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro y Login de Usuario</title>
+    <title>Crear Usuario</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f4; }
         .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
@@ -11,24 +11,27 @@
         button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
         button:hover { background: #0056b3; }
         .msg { margin: 10px 0; color: #d8000c; text-align: center; }
+        .small-link { text-align: center; margin-top: 16px; font-size: 0.95em; }
+        .small-link a { color: #007bff; text-decoration: none; }
+        .small-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Login</h2>
-        <input type="text" id="nombreLogin" placeholder="Nombre de usuario">
-        <input type="password" id="contrasenaLogin" placeholder="Contraseña">
-        <button onclick="loginUsuario()">Ingresar</button>
-        <div id="msgLogin" class="msg"></div>
+        <h2>Crear Usuario</h2>
+        <input type="text" id="nombre" placeholder="Nombre de usuario">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <button onclick="crearUsuario()">Registrar</button>
+        <div id="msgRegistro" class="msg"></div>
         <div class="small-link">
-            <a href="crear.html">Crear cuenta</a> | <a href="cambiar.html">Cambiar contraseña</a>
+            <a href="index.html">Volver al login</a>
         </div>
     </div>
     <script>
-        function loginUsuario() {
-            const nombre = document.getElementById('nombreLogin').value;
-            const contrasena = document.getElementById('contrasenaLogin').value;
-            fetch('/usuarios/login', {
+        function crearUsuario() {
+            const nombre = document.getElementById('nombre').value;
+            const contrasena = document.getElementById('contrasena').value;
+            fetch('/usuarios/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre, contrasena })
@@ -36,12 +39,12 @@
             .then(res => res.json())
             .then(data => {
                 if (data.nombre && data.nombre.startsWith('ERROR:')) {
-                    document.getElementById('msgLogin').innerText = data.nombre;
+                    document.getElementById('msgRegistro').innerText = data.nombre;
                 } else {
-                    document.getElementById('msgLogin').innerText = 'Login exitoso';
+                    document.getElementById('msgRegistro').innerText = 'Usuario creado correctamente';
                 }
             })
-            .catch(() => document.getElementById('msgLogin').innerText = 'Error de conexión');
+            .catch(() => document.getElementById('msgRegistro').innerText = 'Error de conexión');
         }
     </script>
 </body>

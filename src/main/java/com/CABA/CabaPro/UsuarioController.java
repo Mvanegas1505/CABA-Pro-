@@ -1,4 +1,3 @@
-
 package com.CABA.CabaPro;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ public class UsuarioController {
         try {
             return usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena());
         } catch (Exception e) {
-            // Retornar usuario vacío con mensaje de error en nombre
             Usuario error = new Usuario();
             error.setNombre("ERROR: " + e.getMessage());
             return error;
@@ -31,5 +29,28 @@ public class UsuarioController {
             error.setNombre("ERROR: " + e.getMessage());
             return error;
         }
+    }
+
+    @PostMapping("/cambiar-contrasena")
+    public String cambiarContrasena(@RequestBody CambiarContrasenaRequest req) {
+        try {
+            usuarioService.cambiarContrasena(req.getNombre(), req.getContrasenaAntigua(), req.getContrasenaNueva());
+            return "Contraseña cambiada correctamente";
+        } catch (Exception e) {
+            return "ERROR: " + e.getMessage();
+        }
+    }
+
+    public static class CambiarContrasenaRequest {
+        private String nombre;
+        private String contrasenaAntigua;
+        private String contrasenaNueva;
+
+        public String getNombre() { return nombre; }
+        public void setNombre(String nombre) { this.nombre = nombre; }
+        public String getContrasenaAntigua() { return contrasenaAntigua; }
+        public void setContrasenaAntigua(String contrasenaAntigua) { this.contrasenaAntigua = contrasenaAntigua; }
+        public String getContrasenaNueva() { return contrasenaNueva; }
+        public void setContrasenaNueva(String contrasenaNueva) { this.contrasenaNueva = contrasenaNueva; }
     }
 }

@@ -1,9 +1,9 @@
-
 package com.CABA.CabaPro;
 
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioService {
@@ -31,5 +31,18 @@ public class UsuarioService {
             }
         }
         throw new Exception("Usuario o contraseña incorrectos");
+    }
+
+    public boolean cambiarContrasena(String nombre, String contrasenaAntigua, String contrasenaNueva) throws Exception {
+        for (Usuario u : usuarios) {
+            if (u.getNombre().equals(nombre)) {
+                if (!u.getContrasena().equals(contrasenaAntigua)) {
+                    throw new Exception("La contraseña antigua es incorrecta");
+                }
+                u.setContrasena(contrasenaNueva);
+                return true;
+            }
+        }
+        throw new Exception("Usuario no encontrado");
     }
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar Contraseña</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+        h2 { text-align: center; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin: 8px 0; border-radius: 4px; border: 1px solid #ccc; }
+        button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .msg { margin: 10px 0; color: #d8000c; text-align: center; }
+        .small-link { text-align: center; margin-top: 16px; font-size: 0.95em; }
+        .small-link a { color: #007bff; text-decoration: none; }
+        .small-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cambiar Contraseña</h2>
+        <input type="text" id="nombre" placeholder="Nombre de usuario">
+        <input type="password" id="contrasenaAntigua" placeholder="Contraseña actual">
+        <input type="password" id="contrasenaNueva" placeholder="Nueva contraseña">
+        <button onclick="cambiarContrasena()">Cambiar</button>
+        <div id="msgCambio" class="msg"></div>
+        <div class="small-link">
+            <a href="index.html">Volver al login</a>
+        </div>
+    </div>
+    <script>
+        function cambiarContrasena() {
+            const nombre = document.getElementById('nombre').value;
+            const contrasenaAntigua = document.getElementById('contrasenaAntigua').value;
+            const contrasenaNueva = document.getElementById('contrasenaNueva').value;
+            fetch('/usuarios/cambiar-contrasena', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, contrasenaAntigua, contrasenaNueva })
+            })
+            .then(res => res.text())
+            .then(msg => {
+                document.getElementById('msgCambio').innerText = msg;
+            })
+            .catch(() => document.getElementById('msgCambio').innerText = 'Error de conexión');
+        }
+    </script>
+</body>
+</html>
