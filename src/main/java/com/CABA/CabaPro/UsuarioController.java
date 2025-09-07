@@ -1,11 +1,28 @@
 package com.CABA.CabaPro;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
+    @PostMapping("/login-admin")
+    public String loginAdmin(@RequestBody AdminLoginRequest req) {
+        if (usuarioService.loginAdmin(req.getContrasena())) {
+            return "Login admin exitoso";
+        } else {
+            return "ERROR: Contraseña de administrador incorrecta";
+        }
+    }
+
+    public static class AdminLoginRequest {
+        private String contrasena;
+        public String getContrasena() { return contrasena; }
+        public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    }
     @Autowired
     private UsuarioService usuarioService;
 

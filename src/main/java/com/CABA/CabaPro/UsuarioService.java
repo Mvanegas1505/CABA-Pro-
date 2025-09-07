@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     private List<Usuario> usuarios = new ArrayList<>();
     private Long nextId = 1L;
+    private final String ADMIN_PASSWORD = "ADMIN1";
+
+    public boolean loginAdmin(String contrasena) {
+        return ADMIN_PASSWORD.equals(contrasena);
+    }
 
     public Usuario crearUsuario(String nombre, String contrasena) throws Exception {
         for (Usuario u : usuarios) {
@@ -26,11 +31,15 @@ public class UsuarioService {
 
     public Usuario login(String nombre, String contrasena) throws Exception {
         for (Usuario u : usuarios) {
-            if (u.getNombre().equals(nombre) && u.getContrasena().equals(contrasena)) {
-                return u;
+            if (u.getNombre().equals(nombre)) {
+                if (u.getContrasena().equals(contrasena)) {
+                    return u;
+                } else {
+                    throw new Exception("Contraseña incorrecta");
+                }
             }
         }
-        throw new Exception("Usuario o contraseña incorrectos");
+        throw new Exception("El usuario no existe. Por favor cree una cuenta para poder ingresar.");
     }
 
     public boolean cambiarContrasena(String nombre, String contrasenaAntigua, String contrasenaNueva) throws Exception {
