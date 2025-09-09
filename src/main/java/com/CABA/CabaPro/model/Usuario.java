@@ -1,5 +1,5 @@
 
-package com.CABA.CabaPro;
+package com.CABA.CabaPro.model;
 
 public class Usuario {
     private Long id;

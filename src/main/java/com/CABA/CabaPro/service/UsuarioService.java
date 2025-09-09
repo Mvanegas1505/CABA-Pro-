@@ -1,9 +1,11 @@
-package com.CABA.CabaPro;
+package com.CABA.CabaPro.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.CABA.CabaPro.model.Usuario;
 
 @Service
 public class UsuarioService {
