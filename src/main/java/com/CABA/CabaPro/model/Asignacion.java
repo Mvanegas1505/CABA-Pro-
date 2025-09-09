@@ -11,7 +11,7 @@ public class Asignacion {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private EspecialidadEnum rol;
+    private EspecialidadEnum especialidad;
 
     @Enumerated(EnumType.STRING)
     private EstadoAsignacionEnum estado;
@@ -37,8 +37,8 @@ public class Asignacion {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public EspecialidadEnum getRol() { return rol; }
-    public void setRol(EspecialidadEnum rol) { this.rol = rol; }
+    public EspecialidadEnum getRol() { return especialidad; }
+    public void setRol(EspecialidadEnum especialidad) { this.especialidad = especialidad; }
 
     public EstadoAsignacionEnum getEstado() { return estado; }
     public void setEstado(EstadoAsignacionEnum estado) { this.estado = estado; }
