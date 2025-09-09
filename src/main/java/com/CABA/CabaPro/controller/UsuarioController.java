@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.service.UsuarioService;
@@ -17,7 +16,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
 
     // Registro árbitro (GET)
     @GetMapping("/registro")
@@ -50,10 +48,8 @@ public class UsuarioController {
     @GetMapping("/perfil")
     public String perfilPage(@org.springframework.web.bind.annotation.RequestParam String correo,
             org.springframework.ui.Model model) {
-        Usuario usuario = null;
-        try {
-            usuario = usuarioService.login(correo, ""); // Solo para obtener el usuario, ignora contraseña
-        } catch (Exception e) {
+        Usuario usuario = usuarioService.findByCorreo(correo);
+        if (usuario == null) {
             return "redirect:/registro";
         }
         model.addAttribute("usuario", usuario);
@@ -64,9 +60,15 @@ public class UsuarioController {
     @PostMapping("/perfil")
     public String actualizarPerfil(@org.springframework.web.bind.annotation.ModelAttribute Usuario usuario,
             org.springframework.ui.Model model) {
-        // usuarioService.actualizarPerfil(usuario); // Implementar si es necesario
-        model.addAttribute("message", "Perfil actualizado correctamente");
-        return "user/perfil";
+        // Buscar el usuario real por correo
+        Usuario usuarioDB = usuarioService.findByCorreo(usuario.getCorreo());
+        if (usuarioDB != null) {
+            usuarioDB.setEspecialidad(usuario.getEspecialidad());
+            usuarioDB.setEscalafon(usuario.getEscalafon());
+            usuarioDB.setFotoPerfilUrl(usuario.getFotoPerfilUrl());
+            usuarioService.guardar(usuarioDB);
+        }
+        return "redirect:/arbitro/dashboard";
     }
 
     // Cambiar contraseña (POST)

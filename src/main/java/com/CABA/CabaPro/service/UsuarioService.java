@@ -1,3 +1,7 @@
+// ...existing code...
+// ...existing code...
+
+// ...existing code...
 package com.CABA.CabaPro.service;
 
 import java.util.Optional;
@@ -10,10 +14,18 @@ import com.CABA.CabaPro.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+    public Usuario guardar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
     private final String ADMIN_PASSWORD = "ADMIN1";
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    public Usuario findByCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo).orElse(null);
+    }
 
     public boolean loginAdmin(String contrasena) {
         return ADMIN_PASSWORD.equals(contrasena);
@@ -27,6 +39,7 @@ public class UsuarioService {
         usuario.setNombre(nombre);
         usuario.setContrasena(contrasena);
         usuario.setCorreo(correo);
+        usuario.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
         return usuarioRepository.save(usuario);
     }
 

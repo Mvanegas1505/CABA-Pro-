@@ -10,7 +10,7 @@
 <body>
     <div class="perfil-container">
         <h2>Completa tu perfil</h2>
-        <form action="/usuarios/perfil" method="post">
+        <form action="/perfil" method="post">
             <input type="hidden" name="correo" th:value="${usuario.correo}" />
             <label for="especialidad">Especialidad:</label>
             <select id="especialidad" name="especialidad" required>
