@@ -1,7 +1,7 @@
 package com.CABA.CabaPro.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import com.CABA.CabaPro.model.Torneo;
 import com.CABA.CabaPro.model.Tarifa;
 import com.CABA.CabaPro.model.Usuario;
@@ -13,8 +13,7 @@ public class Partido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private LocalDate fecha;
 
     private String hora;
     private String lugar;
@@ -38,21 +37,51 @@ public class Partido {
     }
 
     // Getters y setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Date getFecha() { return fecha; }
-    public void setFecha(Date fecha) { this.fecha = fecha; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getHora() { return hora; }
-    public void setHora(String hora) { this.hora = hora; }
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-    public String getLugar() { return lugar; }
-    public void setLugar(String lugar) { this.lugar = lugar; }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
 
-    public Torneo getTorneo() { return torneo; }
-    public void setTorneo(Torneo torneo) { this.torneo = torneo; }
+    public String getHora() {
+        return hora;
+    }
 
-    public Tarifa getTarifa() { return tarifa; }
-    public void setTarifa(Tarifa tarifa) { this.tarifa = tarifa; }
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public Torneo getTorneo() {
+        return torneo;
+    }
+
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
+    }
+
+    public Tarifa getTarifa() {
+        return tarifa;
+    }
+
+    public void setTarifa(Tarifa tarifa) {
+        this.tarifa = tarifa;
+    }
 }

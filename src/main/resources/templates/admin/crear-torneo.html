@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b">
@@ -25,31 +27,33 @@
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="bg-white rounded-lg shadow-sm p-6">
-            <form th:action="@{/admin/torneos}" method="post" th:object="${torneo}">
+            <form th:action="@{/admin/crear-torneo}" method="post" th:object="${torneo}">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">
                             Nombre del Torneo
                         </label>
-                        <input type="text" id="nombre" th:field="*{nombre}" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Ej: Liga Metropolitana 2024" required>
+                        <input type="text" id="nombre" th:field="*{nombre}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Ej: Liga Metropolitana 2024" required>
                     </div>
 
                     <div>
                         <label for="fechaInicio" class="block text-sm font-medium text-gray-700 mb-2">
                             Fecha de Inicio
                         </label>
-                        <input type="date" id="fechaInicio" th:field="*{fechaInicio}" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <input type="date" id="fechaInicio" th:field="*{fechaInicio}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            required>
                     </div>
 
                     <div>
                         <label for="fechaFin" class="block text-sm font-medium text-gray-700 mb-2">
                             Fecha de Finalización
                         </label>
-                        <input type="date" id="fechaFin" th:field="*{fechaFin}" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <input type="date" id="fechaFin" th:field="*{fechaFin}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            required>
                     </div>
                 </div>
 
@@ -63,9 +67,9 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                <input type="number" name="tarifaFIBA" step="0.01" 
-                                       class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="15000.00">
+                                <input type="number" name="tarifaFiba" step="0.01"
+                                    class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="15000.00">
                             </div>
                         </div>
 
@@ -75,9 +79,9 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                <input type="number" name="tarifaPRIMERA" step="0.01" 
-                                       class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="12000.00">
+                                <input type="number" name="tarifaPrimera" step="0.01"
+                                    class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="12000.00">
                             </div>
                         </div>
 
@@ -87,19 +91,21 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                <input type="number" name="tarifaSEGUNDA" step="0.01" 
-                                       class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="10000.00">
+                                <input type="number" name="tarifaSegunda" step="0.01"
+                                    class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="10000.00">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-8">
-                    <a href="/admin/dashboard" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                    <a href="/admin/dashboard"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
                         Cancelar
                     </a>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-save mr-2"></i>
                         Crear Torneo
                     </button>
@@ -108,4 +114,5 @@
         </div>
     </div>
 </body>
+
 </html>

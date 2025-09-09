@@ -12,8 +12,14 @@ import org.springframework.stereotype.Service;
 import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.repository.UsuarioRepository;
 
+import java.util.List;
+
 @Service
 public class UsuarioService {
+    public List<Usuario> getAllUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
     public Usuario guardar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }

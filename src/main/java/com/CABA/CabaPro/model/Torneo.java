@@ -1,7 +1,7 @@
 package com.CABA.CabaPro.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import com.CABA.CabaPro.model.EscalafonEnum;
 import com.CABA.CabaPro.model.Partido;
@@ -15,30 +15,53 @@ public class Torneo {
 
     private String nombre;
 
-    @Temporal(TemporalType.DATE)
-    private Date fechaInicio;
+    private LocalDate fechaInicio;
 
-    @Temporal(TemporalType.DATE)
-    private Date fechaFin;
+    private LocalDate fechaFin;
 
     // Relación con Partido (asumiendo que existe la clase Partido)
     @OneToMany(mappedBy = "torneo")
     private List<Partido> partidos;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Date getFechaInicio() { return fechaInicio; }
-    public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public Date getFechaFin() { return fechaFin; }
-    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public List<Partido> getPartidos() { return partidos; }
-    public void setPartidos(List<Partido> partidos) { this.partidos = partidos; }
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public List<Partido> getPartidos() {
+        return partidos;
+    }
+
+    public void setPartidos(List<Partido> partidos) {
+        this.partidos = partidos;
+    }
 
     // Métodos del diagrama
     public List<Partido> obtenerPartidos() {
@@ -49,7 +72,7 @@ public class Torneo {
         // Implementar lógica para definir tarifa
     }
 
-    public List<Partido> filtrarPartidos(Date fechaInicio, Date fechaFin, Usuario arbitro) {
+    public List<Partido> filtrarPartidos(LocalDate fechaInicio, LocalDate fechaFin, Usuario arbitro) {
         // Implementar lógica de filtrado
         return null;
     }

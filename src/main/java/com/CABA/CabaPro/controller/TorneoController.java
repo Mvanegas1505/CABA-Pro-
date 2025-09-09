@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TorneoController {
@@ -33,7 +34,10 @@ public class TorneoController {
     public String crearTorneo(@ModelAttribute Torneo torneo,
                               @RequestParam("tarifaFiba") Double tarifaFiba,
                               @RequestParam("tarifaPrimera") Double tarifaPrimera,
-                              @RequestParam("tarifaSegunda") Double tarifaSegunda) {
+                              @RequestParam("tarifaSegunda") Double tarifaSegunda,
+                              RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("successMessage", "¡Torneo creado exitosamente!");
 
         // Guardar torneo
         Torneo torneoGuardado = torneoService.saveTorneo(torneo);
@@ -45,4 +49,6 @@ public class TorneoController {
 
         return "redirect:/admin/dashboard";
     }
+
+    
 }
