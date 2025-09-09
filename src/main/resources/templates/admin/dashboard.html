@@ -85,13 +85,13 @@
             <h2 class="text-xl font-bold text-gray-900 mb-4">Acciones Rápidas</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Added real form actions for creating tournaments and matches -->
-                <a href="/admin/torneos/crear" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-left transition-colors block">
+                <a href="/admin/crear-torneo" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-left transition-colors block">
                     <i class="fas fa-plus-circle text-2xl mb-2"></i>
                     <h3 class="font-bold">Crear Torneo</h3>
                     <p class="text-sm opacity-90">Nuevo torneo de baloncesto</p>
                 </a>
                 
-                <a href="/admin/partidos/crear" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-left transition-colors block">
+                <a href="/admin/crear-partido" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-left transition-colors block">
                     <i class="fas fa-calendar-plus text-2xl mb-2"></i>
                     <h3 class="font-bold">Programar Partido</h3>
                     <p class="text-sm opacity-90">Añadir nuevo partido</p>
@@ -155,7 +155,7 @@
             <div th:if="${partidos == null or partidos.empty}" class="text-center py-8">
                 <i class="fas fa-calendar-times text-gray-300 text-4xl mb-4"></i>
                 <p class="text-gray-500">No hay partidos programados</p>
-                <a href="/admin/partidos/crear" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer partido</a>
+                <a href="/admin/crear-partido.html" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer partido</a>
             </div>
         </div>
     </div>
