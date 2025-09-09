@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Completar Perfil de Árbitro</title>
+    <link rel="stylesheet" href="/css/perfil.css">
+</head>
+
+<body>
+    <div class="perfil-container">
+        <h2>Completa tu perfil</h2>
+        <form action="/usuarios/perfil" method="post">
+            <input type="hidden" name="correo" th:value="${usuario.correo}" />
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" name="especialidad" required>
+                <option value="">Selecciona</option>
+                <option value="CAMPO">Campo</option>
+                <option value="MESA">Mesa</option>
+            </select>
+            <label for="escalafon">Escalafón:</label>
+            <select id="escalafon" name="escalafon" required>
+                <option value="">Selecciona</option>
+                <option value="FIBA">FIBA</option>
+                <option value="PRIMERA">Primera</option>
+                <option value="SEGUNDA">Segunda</option>
+            </select>
+            <label for="fotoPerfilUrl">Foto de perfil (URL):</label>
+            <input type="text" id="fotoPerfilUrl" name="fotoPerfilUrl">
+            <button type="submit">Guardar perfil</button>
+        </form>
+        <div th:if="${message}" class="success-message">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+</body>
+
+</html>

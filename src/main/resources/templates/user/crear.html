@@ -1,27 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Crear Usuario</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; }
-        .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
-        h2 { text-align: center; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin: 8px 0; border-radius: 4px; border: 1px solid #ccc; }
-        button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .msg { margin: 10px 0; color: #d8000c; text-align: center; }
-        .small-link { text-align: center; margin-top: 16px; font-size: 0.95em; }
-        .small-link a { color: #007bff; text-decoration: none; }
-        .small-link a:hover { text-decoration: underline; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .msg {
+            margin: 10px 0;
+            color: #d8000c;
+            text-align: center;
+        }
+
+        .small-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.95em;
+        }
+
+        .small-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .small-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Crear Usuario</h2>
-    <input type="text" id="nombre" placeholder="Nombre de usuario">
-    <input type="email" id="email" placeholder="Correo electrónico">
-    <input type="password" id="contrasena" placeholder="Contraseña">
+        <input type="text" id="nombre" placeholder="Nombre de usuario">
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="contrasena" placeholder="Contraseña">
         <button onclick="crearUsuario()">Registrar</button>
         <div id="msgRegistro" class="msg"></div>
         <div class="small-link">
@@ -38,16 +91,231 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre, email, contrasena })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.nombre && data.nombre.startsWith('ERROR:')) {
-                    document.getElementById('msgRegistro').innerText = data.nombre;
-                } else {
-                    document.getElementById('msgRegistro').innerText = 'Usuario creado correctamente';
-                }
-            })
-            .catch(() => document.getElementById('msgRegistro').innerText = 'Error de conexión');
+                .then(res => res.json())
+                .then(data => {
+                    if (data.nombre && data.nombre.startsWith('ERROR:')) {
+                        document.getElementById('msgRegistro').innerText = data.nombre;
+                    } else {
+                        document.getElementById('msgRegistro').innerText = 'Usuario creado correctamente';
+                    }
+                })
+                .catch(() => document.getElementById('msgRegistro').innerText = 'Error de conexión');
         }
     </script>
 </body>
+
+</html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .msg {
+            margin: 10px 0;
+            color: #d8000c;
+            text-align: center;
+        }
+
+        .small-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.95em;
+        }
+
+        .small-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .small-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Crear Usuario</h2>
+        <input type="text" id="nombre" placeholder="Nombre de usuario">
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <button onclick="crearUsuario()">Registrar</button>
+        <div id="msgRegistro" class="msg"></div>
+        <div class="small-link">
+            <a href="index.html">Volver al login</a>
+        </div>
+    </div>
+    <script>
+        function crearUsuario() {
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const contrasena = document.getElementById('contrasena').value;
+            fetch('/usuarios/crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, email, contrasena })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.nombre && data.nombre.startsWith('ERROR:')) {
+                        document.getElementById('msgRegistro').innerText = data.nombre;
+                    } else {
+                        document.getElementById('msgRegistro').innerText = 'Usuario creado correctamente';
+                    }
+                })
+                .catch(() => document.getElementById('msgRegistro').innerText = 'Error de conexión');
+        }
+    </script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .msg {
+            margin: 10px 0;
+            color: #d8000c;
+            text-align: center;
+        }
+
+        .small-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.95em;
+        }
+
+        .small-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .small-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Crear Usuario</h2>
+        <input type="text" id="nombre" placeholder="Nombre de usuario">
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <button onclick="crearUsuario()">Registrar</button>
+        <div id="msgRegistro" class="msg"></div>
+        <div class="small-link">
+            <a href="index.html">Volver al login</a>
+        </div>
+    </div>
+    <script>
+        function crearUsuario() {
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const contrasena = document.getElementById('contrasena').value;
+            fetch('/usuarios/crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, email, contrasena })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.nombre && data.nombre.startsWith('ERROR:')) {
+                        document.getElementById('msgRegistro').innerText = data.nombre;
+                    } else {
+                        document.getElementById('msgRegistro').innerText = 'Usuario creado correctamente';
+                    }
+                })
+                .catch(() => document.getElementById('msgRegistro').innerText = 'Error de conexión');
+        }
+    </script>
+</body>
+
 </html>
