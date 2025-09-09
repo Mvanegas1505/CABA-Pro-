@@ -33,7 +33,8 @@
 
             <!-- Profile Form -->
             <div class="bg-white rounded-xl shadow-lg p-8">
-                <form th:action="@{/arbitro/dashboard}" method="get" th:object="${usuario}" class="space-y-8">
+                <form th:action="@{/perfil}" method="post" th:object="${usuario}" class="space-y-8">
+                    <input type="hidden" th:field="*{correo}" />
                     <!-- Professional Information Section -->
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
