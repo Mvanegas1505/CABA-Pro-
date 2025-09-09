@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.service.UsuarioService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.CABA.CabaPro.dto.RegistroArbitroDTO;
 
 @Controller

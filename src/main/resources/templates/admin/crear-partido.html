@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Partido - CABAPRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-3"></i>
+                        <h1 class="text-xl font-bold text-gray-900">CABAPRO Admin</h1>
+                    </div>
+                    <nav class="flex space-x-4">
+                        <a href="/admin/dashboard" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                        </a>
+                        <a href="/logout" class="text-gray-600 hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Cerrar Sesión
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Crear Nuevo Partido</h2>
+                <p class="text-gray-600">Programa un nuevo partido para un torneo existente</p>
+            </div>
+
+            <!-- Form -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <form th:action="@{/admin/crear-partido}" th:object="${partido}" method="post" class="space-y-6">
+                    
+                    <!-- Torneo Selection -->
+                    <div>
+                        <label for="torneo" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-trophy mr-1"></i> Torneo
+                        </label>
+                        <select th:field="*{torneo}" id="torneo" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            <option value="">Seleccionar torneo...</option>
+                            <option th:each="torneo : ${torneos}" 
+                                    th:value="${torneo.id}" 
+                                    th:text="${torneo.nombre}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Match Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="equipoLocal" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-home mr-1"></i> Equipo Local
+                            </label>
+                            <input type="text" th:field="*{equipoLocal}" id="equipoLocal" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                   placeholder="Nombre del equipo local">
+                        </div>
+
+                        <div>
+                            <label for="equipoVisitante" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-plane mr-1"></i> Equipo Visitante
+                            </label>
+                            <input type="text" th:field="*{equipoVisitante}" id="equipoVisitante" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                   placeholder="Nombre del equipo visitante">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="fechaHora" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-calendar mr-1"></i> Fecha y Hora
+                            </label>
+                            <input type="datetime-local" th:field="*{fechaHora}" id="fechaHora" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-map-marker-alt mr-1"></i> Ubicación
+                            </label>
+                            <input type="text" th:field="*{ubicacion}" id="ubicacion" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                   placeholder="Dirección del partido">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t">
+                        <a href="/admin/dashboard" 
+                           class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                            Cancelar
+                        </a>
+                        <button type="submit" 
+                                class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+                            <i class="fas fa-plus mr-1"></i> Crear Partido
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

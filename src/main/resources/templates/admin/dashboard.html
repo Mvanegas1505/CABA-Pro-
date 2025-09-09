@@ -1,36 +1,163 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Árbitro</title>
-    <style>
-        body {
-            background: #f7f7f7;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 80px auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px #0001;
-            padding: 32px;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 24px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrador - CabaPro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-3"></i>
+                    <h1 class="text-2xl font-bold text-gray-900">CabaPro Admin</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Added dynamic user name from session -->
+                    <span class="text-gray-600" th:text="${session.usuario != null ? session.usuario.nombre : 'Administrador'}">Administrador</span>
+                    <a href="/logout" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<body>
-    <div class="container">
-        <h1>Bienvenido al Dashboard de ADMIN</h1>
-        <p>¡Aquí verás tus funciones y notificaciones!</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Cards -->
+        <!-- Updated stats to use real data from backend -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-trophy text-blue-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Torneos Activos</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${torneosActivos ?: 0}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar text-green-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Partidos Hoy</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${partidosHoy ?: 0}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-users text-purple-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Árbitros Activos</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${arbitrosActivos ?: 0}">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-orange-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Asignaciones Pendientes</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${asignacionesPendientes ?: 0}">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Acciones Rápidas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Added real form actions for creating tournaments and matches -->
+                <a href="/admin/torneos/crear" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-left transition-colors block">
+                    <i class="fas fa-plus-circle text-2xl mb-2"></i>
+                    <h3 class="font-bold">Crear Torneo</h3>
+                    <p class="text-sm opacity-90">Nuevo torneo de baloncesto</p>
+                </a>
+                
+                <a href="/admin/partidos/crear" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-left transition-colors block">
+                    <i class="fas fa-calendar-plus text-2xl mb-2"></i>
+                    <h3 class="font-bold">Programar Partido</h3>
+                    <p class="text-sm opacity-90">Añadir nuevo partido</p>
+                </a>
+                
+                <a href="/admin/arbitros" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg text-left transition-colors block">
+                    <i class="fas fa-user-plus text-2xl mb-2"></i>
+                    <h3 class="font-bold">Gestionar Árbitros</h3>
+                    <p class="text-sm opacity-90">Ver y asignar árbitros</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Matches -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-900">Partidos Recientes</h2>
+                <a href="/admin/partidos" class="text-blue-500 hover:text-blue-700 font-medium">Ver todos</a>
+            </div>
+            
+            <!-- Updated to use real partido data from backend -->
+            <div class="space-y-4" th:if="${partidos != null and !partidos.empty}">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" th:each="partido : ${partidos}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <img src="/placeholder.svg?height=60&width=60" alt="Cancha" class="w-15 h-15 rounded-lg object-cover">
+                            <div>
+                                <h3 class="font-bold text-gray-900" th:text="${partido.torneo.nombre}">Torneo</h3>
+                                <div class="flex items-center text-sm text-gray-600 mt-1">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span th:text="${partido.lugar}">Lugar</span>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600 mt-1">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    <span th:text="${#dates.format(partido.fecha, 'dd/MM/yyyy')} + ', ' + ${partido.hora}">Fecha y hora</span>
+                                    <span class="mx-2">•</span>
+                                    <i class="fas fa-users mr-1"></i>
+                                    <span th:text="${partido.asignaciones != null ? partido.asignaciones.size() : 0} + ' árbitros asignados'">0 árbitros asignados</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <!-- Dynamic status based on assignment completion -->
+                            <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 3}" 
+                                  class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                Confirmado
+                            </span>
+                            <span th:if="${partido.asignaciones == null or partido.asignaciones.size() < 3}" 
+                                  class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                                Pendiente
+                            </span>
+                            <a th:href="@{/admin/partidos/{id}(id=${partido.id})}" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Added empty state when no matches exist -->
+            <div th:if="${partidos == null or partidos.empty}" class="text-center py-8">
+                <i class="fas fa-calendar-times text-gray-300 text-4xl mb-4"></i>
+                <p class="text-gray-500">No hay partidos programados</p>
+                <a href="/admin/partidos/crear" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer partido</a>
+            </div>
+        </div>
     </div>
 </body>
-
 </html>
