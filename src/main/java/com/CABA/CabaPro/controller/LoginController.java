@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-/**
- * Controlador para el login de usuarios (admin y arbitro).
- * Cumple con el estilo de Google Java Style Guide.
- */
+
 @Controller
 public class LoginController {
 
