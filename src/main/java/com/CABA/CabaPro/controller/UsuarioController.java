@@ -12,40 +12,12 @@ import com.CABA.CabaPro.service.UsuarioService;
 import com.CABA.CabaPro.dto.RegistroArbitroDTO;
 
 @Controller
-@RequestMapping("/usuarios")
+
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    // Login page (GET)
-    @GetMapping("/login")
-    public String loginPage() {
-        return "user/login";
-    }
-
-    // Login API (POST, para uso con JS o pruebas)
-    @PostMapping("/login")
-    public Usuario login(@RequestBody Usuario usuario) {
-        try {
-            return usuarioService.login(usuario.getCorreo(), usuario.getContrasena());
-        } catch (Exception e) {
-            Usuario error = new Usuario();
-            error.setNombre("ERROR: " + e.getMessage());
-            return error;
-        }
-    }
-
-    // Admin login (POST)
-    @PostMapping("/login-admin")
-    public String loginAdmin(@RequestBody AdminLoginRequest req, org.springframework.ui.Model model) {
-        if (usuarioService.loginAdmin(req.getContrasena())) {
-            model.addAttribute("message", "Login admin exitoso");
-        } else {
-            model.addAttribute("message", "ERROR: Contraseña de administrador incorrecta");
-        }
-        return "user/login";
-    }
 
     // Registro árbitro (GET)
     @GetMapping("/registro")
@@ -67,7 +39,7 @@ public class UsuarioController {
             usuario.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
             usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena(), usuario.getCorreo());
             model.addAttribute("usuario", usuario);
-            return "redirect:/usuarios/perfil?correo=" + usuario.getCorreo();
+            return "redirect:/perfil?correo=" + usuario.getCorreo();
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "user/registro";
@@ -82,7 +54,7 @@ public class UsuarioController {
         try {
             usuario = usuarioService.login(correo, ""); // Solo para obtener el usuario, ignora contraseña
         } catch (Exception e) {
-            return "redirect:/usuarios/registro";
+            return "redirect:/registro";
         }
         model.addAttribute("usuario", usuario);
         return "user/perfil";
