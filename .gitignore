@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar base de datos temporal de pruebas
+/data/testdb.mv.db
