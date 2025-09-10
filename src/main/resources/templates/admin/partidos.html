@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Partidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Partidos</h1>
+        <div class="space-y-4" th:if="${partidos != null and !partidos.empty}">
+            <div class="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow" th:each="partido : ${partidos}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <h3 class="font-bold text-gray-900" th:text="${partido.torneo.nombre}">Torneo</h3>
+                            <div class="flex items-center text-sm text-gray-600 mt-1">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span th:text="${partido.lugar}">Lugar</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600 mt-1">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span th:text="${#temporals.format(partido.fecha, 'dd/MM/yyyy')}"></span>
+                                <span class="mx-2">•</span>
+                                <span th:text="${partido.hora}">Hora</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600 mt-1">
+                                <i class="fas fa-users mr-1"></i>
+                                <span th:text="${partido.asignaciones != null ? partido.asignaciones.size() : 0} + ' árbitros asignados'">0 árbitros asignados</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 3}"
+                            class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Confirmado
+                        </span>
+                        <span th:if="${partido.asignaciones == null or partido.asignaciones.size() < 3}"
+                            class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Pendiente
+                        </span>
+                        <a href="/admin/arbitros"
+                            th:if="${partido.asignaciones == null or partido.asignaciones.size() < 4}"
+                            class="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg text-left transition-colors block">
+                            <i class="fas fa-user-plus text-lg mb-1"></i>
+                            <h3 class="font-bold text-sm">Asignar árbitro</h3>
+                        </a>
+                </div>
+            </div>
+        </div>
+        <div th:if="${partidos == null or partidos.empty}" class="text-center py-8">
+            <i class="fas fa-calendar-times text-gray-300 text-4xl mb-4"></i>
+            <p class="text-gray-500">No hay partidos programados</p>
+            <a href="/admin/crear-partido" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer partido</a>
+        </div>
+    </div>
+</body>
+</html>
