@@ -23,6 +23,17 @@ public class UsuarioService {
     public Usuario guardar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+        // Devuelve todos los usuarios con rol ARBITRO
+        public List<Usuario> getArbitros() {
+            return usuarioRepository.findAll().stream()
+                    .filter(u -> u.getRol() != null && u.getRol().name().equals("ARBITRO"))
+                    .toList();
+        }
+
+        // Devuelve un usuario por su ID
+        public Optional<Usuario> getUsuarioById(Long id) {
+            return usuarioRepository.findById(id);
+        }
 
     private final String ADMIN_PASSWORD = "ADMIN1";
 

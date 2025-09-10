@@ -91,8 +91,7 @@
                             <div th:each="asignacion : ${partido.asignaciones}" class="bg-gray-50 rounded-lg p-4">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="font-medium text-gray-900"
-                                        th:text="${asignacion.arbitro.nombre + ' ' + asignacion.arbitro.apellido}">Juan
-                                        Pérez</span>
+                                        th:text="${asignacion.arbitro.nombre}">Nombre árbitro</span>
                                     <span th:if="${asignacion.estado.name() == 'ACEPTADA'}"
                                         class="text-green-600 text-sm">
                                         <i class="fas fa-check-circle"></i> Aceptado
@@ -109,10 +108,6 @@
                                 <div class="text-sm text-gray-600">
                                     <span th:text="${asignacion.arbitro.escalafon}">FIBA</span> •
                                     <span th:text="${asignacion.arbitro.especialidad}">CAMPO</span>
-                                </div>
-                                <div class="text-sm text-gray-500 mt-1">
-                                    Tarifa: $<span
-                                        th:text="${asignacion.tarifa != null ? asignacion.tarifa.monto : 'No definida'}">150</span>
                                 </div>
                                 <button class="mt-2 text-red-600 hover:text-red-800 text-sm"
                                     th:onclick="'removeAssignment(' + ${asignacion.id} + ')'">
@@ -194,8 +189,8 @@
                                     class="referee-card border border-gray-200 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
                                     th:data-escalafon="${arbitro.escalafon}"
                                     th:data-especialidad="${arbitro.especialidad}"
-                                    th:data-id="${arbitro.id}"
-                                    th:data-nombre="${arbitro.nombre}">
+                                    th:attr="data-id=${arbitro.id},data-nombre=${arbitro.nombre}"
+                                    onclick="selectReferee(this)">
                                     <div class="flex justify-between items-center">
                                         <div>
                                             <p class="font-medium text-gray-900"
@@ -250,17 +245,14 @@
             });
         }
 
-        function selectReferee(arbitroId, arbitroName) {
-            selectedArbitroId = arbitroId;
-
+        function selectReferee(element) {
+            selectedArbitroId = element.getAttribute('data-id');
             // Reset all cards
             document.querySelectorAll('.referee-card').forEach(card => {
                 card.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
             });
-
             // Highlight selected card
-            event.currentTarget.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
-
+            element.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
             // Enable confirm button
             document.getElementById('confirm-assignment').disabled = false;
         }
