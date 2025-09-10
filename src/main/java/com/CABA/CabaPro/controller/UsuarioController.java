@@ -43,7 +43,7 @@ public class UsuarioController {
             usuario.setCorreo(registroArbitroDTO.getCorreo());
             usuario.setContrasena(registroArbitroDTO.getContrasena());
             usuario.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
-               usuario.setEspecialidad(null); // Inicializa como null
+            usuario.setEspecialidad(null); // Inicializa como null
             usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena(), usuario.getCorreo());
             model.addAttribute("usuario", usuario);
             return "redirect:/perfil?correo=" + usuario.getCorreo();
@@ -76,6 +76,10 @@ public class UsuarioController {
             usuarioDB.setEscalafon(usuario.getEscalafon());
             usuarioDB.setFotoPerfilUrl(usuario.getFotoPerfilUrl());
             usuarioService.guardar(usuarioDB);
+            // Actualizar usuario en sesión
+            jakarta.servlet.http.HttpSession session = ((org.springframework.web.context.request.ServletRequestAttributes) org.springframework.web.context.request.RequestContextHolder
+                    .currentRequestAttributes()).getRequest().getSession();
+            session.setAttribute("usuario", usuarioDB);
         }
         return "redirect:/arbitro/dashboard";
     }
@@ -102,7 +106,7 @@ public class UsuarioController {
             this.contrasena = contrasena;
         }
     }
-    
+
     public static class CambiarContrasenaRequest {
         private String correo;
         private String contrasenaAntigua;

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @Controller
 public class LoginController {
 
@@ -26,14 +25,18 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequestDTO loginRequestDTO, Model model) {
         try {
+            // Siempre obtener el usuario COMPLETO desde la base de datos
             Usuario usuario = usuarioService.login(loginRequestDTO.getCorreo(), loginRequestDTO.getContrasena());
             if (usuario != null) {
-                // Guardar usuario en sesión
-                org.springframework.web.context.request.RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes();
-                jakarta.servlet.http.HttpSession session = (jakarta.servlet.http.HttpSession) requestAttributes.resolveReference(org.springframework.web.context.request.RequestAttributes.REFERENCE_SESSION);
-                session.setAttribute("usuario", usuario);
+                // Refrescar datos completos por correo (por si login devuelve incompleto)
+                Usuario usuarioCompleto = usuarioService.findByCorreo(usuario.getCorreo());
+                org.springframework.web.context.request.RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder
+                        .currentRequestAttributes();
+                jakarta.servlet.http.HttpSession session = (jakarta.servlet.http.HttpSession) requestAttributes
+                        .resolveReference(org.springframework.web.context.request.RequestAttributes.REFERENCE_SESSION);
+                session.setAttribute("usuario", usuarioCompleto);
                 // Redirigir según el rol
-                if (usuario.getRol().name().equals("ADMIN")) {
+                if (usuarioCompleto.getRol() != null && usuarioCompleto.getRol().name().equals("ADMIN")) {
                     return "redirect:/admin/dashboard";
                 } else {
                     return "redirect:/arbitro/dashboard";

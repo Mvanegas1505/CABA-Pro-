@@ -31,14 +31,13 @@ public class ArbitroController {
 
     @GetMapping("/arbitro/dashboard")
     public String dashboard(Model model, HttpSession session) {
-    // Obtener el árbitro desde la sesión (guardado en login)
-    Usuario arbitroSesion = (Usuario) session.getAttribute("usuario");
-    if (arbitroSesion != null && arbitroSesion.getCorreo() != null) {
-        // Consultar el usuario completo por correo
-        Usuario arbitro = usuarioService.getUsuarioByCorreo(arbitroSesion.getCorreo());
-        if (arbitro != null) {
-            List<Asignacion> asignacionesPendientes = asignacionService.getAsignacionesPendientesPorArbitro(arbitro.getCorreo());
-            List<Asignacion> asignacionesAceptadas = asignacionService.getAsignacionesAceptadasPorArbitro(arbitro.getCorreo());
+        // Obtener el árbitro COMPLETO directamente de la sesión
+        Usuario arbitro = (Usuario) session.getAttribute("usuario");
+        if (arbitro != null && arbitro.getCorreo() != null) {
+            List<Asignacion> asignacionesPendientes = asignacionService
+                    .getAsignacionesPendientesPorArbitro(arbitro.getCorreo());
+            List<Asignacion> asignacionesAceptadas = asignacionService
+                    .getAsignacionesAceptadasPorArbitro(arbitro.getCorreo());
 
             model.addAttribute("arbitro", arbitro);
             model.addAttribute("asignacionesPendientes", asignacionesPendientes);
@@ -47,8 +46,7 @@ public class ArbitroController {
             model.addAttribute("totalAceptadas", asignacionesAceptadas.size());
             model.addAttribute("misPartidos", asignacionesAceptadas);
         }
-    }
-    return "arbitro/dashboard";
+        return "arbitro/dashboard";
     }
 
     @PostMapping("/arbitro/aceptar-asignacion/{id}")
