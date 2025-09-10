@@ -3,12 +3,16 @@ package com.CABA.CabaPro.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import com.CABA.CabaPro.model.Torneo;
-import com.CABA.CabaPro.model.Tarifa;
+// import de Tarifa eliminado
 import com.CABA.CabaPro.model.Usuario;
-import com.CABA.CabaPro.model.EspecialidadEnum;
-
+// imports no usados eliminados
+// import com.CABA.CabaPro.model.Torneo;
+// import com.CABA.CabaPro.model.Usuario;
+// import com.CABA.CabaPro.model.EspecialidadEnum;
 @Entity
 public class Partido {
+    @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Asignacion> asignaciones = new java.util.ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,18 +26,19 @@ public class Partido {
     @JoinColumn(name = "torneo_id")
     private Torneo torneo;
 
-    @ManyToOne
-    @JoinColumn(name = "tarifa_id")
-    private Tarifa tarifa;
+    // ...tarifa eliminado...
 
     // Métodos del diagrama
     public void asignarArbitro(Usuario arbitro, EspecialidadEnum rol) {
         // Implementar lógica para asignar árbitro
     }
 
-    public java.util.List<Asignacion> obtenerAsignaciones() {
-        // Implementar lógica para obtener asignaciones
-        return null;
+    // Getter y setter para asignaciones
+    public java.util.List<Asignacion> getAsignaciones() {
+        return asignaciones;
+    }
+    public void setAsignaciones(java.util.List<Asignacion> asignaciones) {
+        this.asignaciones = asignaciones;
     }
 
     // Getters y setters
@@ -77,11 +82,5 @@ public class Partido {
         this.torneo = torneo;
     }
 
-    public Tarifa getTarifa() {
-        return tarifa;
-    }
-
-    public void setTarifa(Tarifa tarifa) {
-        this.tarifa = tarifa;
-    }
+    // ...getTarifa y setTarifa eliminados...
 }
