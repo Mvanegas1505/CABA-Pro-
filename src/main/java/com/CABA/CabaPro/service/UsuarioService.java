@@ -1,5 +1,6 @@
 package com.CABA.CabaPro.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.repository.UsuarioRepository;
-
-import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -52,6 +51,12 @@ public class UsuarioService {
         if (usuarioRepository.findByCorreo(correo).isPresent()) {
             throw new Exception("El correo ya está registrado");
         }
+
+        // Validar que la contraseña no sea vacía o contenga solo espacios
+        if (contrasena == null || contrasena.trim().isEmpty()) {
+            throw new Exception("La contraseña no puede estar vacía ni contener solo espacios");
+        }
+
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setContrasena(contrasena);
