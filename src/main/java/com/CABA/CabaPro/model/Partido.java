@@ -26,7 +26,6 @@ public class Partido {
     @JoinColumn(name = "torneo_id")
     private Torneo torneo;
 
-    // ...tarifa eliminado...
 
     // Métodos del diagrama
     public void asignarArbitro(Usuario arbitro, EspecialidadEnum rol) {

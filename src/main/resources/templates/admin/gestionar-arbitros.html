@@ -46,8 +46,10 @@
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-900"
-                                th:text="${partido.equipoLocal + ' vs ' + partido.equipoVisitante}">Equipo A vs Equipo B
+                            <h3 class="text-xl font-semibold text-gray-900">
+                                <span th:text="${#temporals.format(partido.fecha, 'dd/MM/yyyy')}"></span>
+                                <span th:text="${partido.hora}"></span>
+                                <span th:text="${partido.lugar}"></span>
                             </h3>
                             <p class="text-gray-600" th:text="${partido.torneo.nombre}">Torneo de Baloncesto</p>
                         </div>
@@ -70,15 +72,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div class="flex items-center text-gray-600">
                             <i class="fas fa-calendar-alt mr-2 text-orange-600"></i>
-                            <span th:text="${#temporals.format(partido.fechaHora, 'dd/MM/yyyy')}">15/12/2024</span>
+                            <span th:text="${#temporals.format(partido.fecha, 'dd/MM/yyyy')}">15/12/2024</span>
                         </div>
                         <div class="flex items-center text-gray-600">
                             <i class="fas fa-clock mr-2 text-orange-600"></i>
-                            <span th:text="${#temporals.format(partido.fechaHora, 'HH:mm')}">19:30</span>
+                            <span th:text="${partido.hora}">19:30</span>
                         </div>
                         <div class="flex items-center text-gray-600">
                             <i class="fas fa-map-marker-alt mr-2 text-orange-600"></i>
-                            <span th:text="${partido.ubicacion}">Estadio Central</span>
+                            <span th:text="${partido.lugar}">Lugar</span>
                         </div>
                     </div>
 
