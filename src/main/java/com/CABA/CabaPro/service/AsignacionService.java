@@ -2,6 +2,7 @@ package com.CABA.CabaPro.service;
 
 import com.CABA.CabaPro.model.Asignacion;
 import com.CABA.CabaPro.model.EstadoAsignacionEnum;
+import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.repository.AsignacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,21 @@ public class AsignacionService {
             asignacionRepository.save(asignacion);
         }
         return asignacionOpt;
+    }
+
+    public List<Asignacion> findByUsuarioAndEstadoAndMesAnio(Usuario arbitro, EstadoAsignacionEnum estado, int mes,
+            int anio) {
+        // Filtrar por correo, estado y mes/año del partido
+        List<Asignacion> todas = asignacionRepository.findByArbitroCorreoAndEstado(arbitro.getCorreo(), estado);
+        java.util.List<Asignacion> filtradas = new java.util.ArrayList<>();
+        for (Asignacion a : todas) {
+            if (a.getPartido() != null && a.getPartido().getFecha() != null) {
+                java.time.LocalDate fecha = a.getPartido().getFecha();
+                if (fecha.getMonthValue() == mes && fecha.getYear() == anio) {
+                    filtradas.add(a);
+                }
+            }
+        }
+        return filtradas;
     }
 }

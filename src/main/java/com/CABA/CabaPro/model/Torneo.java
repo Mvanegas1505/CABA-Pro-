@@ -76,4 +76,19 @@ public class Torneo {
         // Implementar lógica de filtrado
         return null;
     }
+    
+    public java.math.BigDecimal getTarifaPorEscalafon(String escalafon) {
+        if (escalafon == null)
+            return java.math.BigDecimal.ZERO;
+        switch (escalafon.toUpperCase()) {
+            case "FIBA":
+                return new java.math.BigDecimal("10000");
+            case "PRIMERA":
+                return new java.math.BigDecimal("7000");
+            case "SEGUNDA":
+                return new java.math.BigDecimal("5000");
+            default:
+                return java.math.BigDecimal.ZERO;
+        }
+    }
 }
