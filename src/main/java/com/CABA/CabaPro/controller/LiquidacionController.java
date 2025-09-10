@@ -33,18 +33,18 @@ public class LiquidacionController {
     @Autowired
     private AsignacionService asignacionService;
 
+    // Muestra el formulario para generar una liquidación
     @GetMapping("/arbitro/liquidaciones")
-    public String verLiquidaciones(HttpSession session, Model model) {
+    public String mostrarFormularioLiquidacion(HttpSession session, Model model) {
         Usuario arbitro = (Usuario) session.getAttribute("usuario");
         if (arbitro == null) {
             return "redirect:/login";
         }
-        List<Liquidacion> liquidaciones = liquidacionService.getLiquidacionesPorArbitro(arbitro.getCorreo());
         model.addAttribute("arbitro", arbitro);
-        model.addAttribute("liquidaciones", liquidaciones);
         return "arbitro/liquidaciones";
     }
 
+    // Procesa el formulario y genera la liquidación
     @PostMapping("/arbitro/liquidaciones/generar")
     public String generarLiquidacion(
             @RequestParam int mes,
@@ -61,11 +61,11 @@ public class LiquidacionController {
                 arbitro, EstadoAsignacionEnum.ACEPTADA, mes, anio);
 
         // Calcular monto total basado en las tarifas de las asignaciones
-        BigDecimal montoTotal = BigDecimal.ZERO;
+        java.math.BigDecimal montoTotal = java.math.BigDecimal.ZERO;
         for (Asignacion asignacion : asignacionesAceptadas) {
             if (asignacion.getPartido() != null && asignacion.getPartido().getTorneo() != null) {
-                // Obtener tarifa según el escalafón del árbitro
-                BigDecimal tarifa = asignacion.getPartido().getTorneo().getTarifaPorEscalafon(arbitro.getEscalafon());
+                java.math.BigDecimal tarifa = asignacion.getPartido().getTorneo()
+                        .getTarifaPorEscalafon(arbitro.getEscalafon());
                 if (tarifa != null) {
                     montoTotal = montoTotal.add(tarifa);
                 }
@@ -82,8 +82,22 @@ public class LiquidacionController {
 
         liquidacionService.saveLiquidacion(liquidacion);
 
+        // Redirigir a la vista de liquidación generada
+        return "redirect:/arbitro/liquidaciones/generada?id=" + liquidacion.getId();
+    }
+
+    @GetMapping("/arbitro/liquidaciones/generada")
+    public String verLiquidacionGenerada(@RequestParam Long id, HttpSession session, Model model) {
+        Usuario arbitro = (Usuario) session.getAttribute("usuario");
+        if (arbitro == null) {
+            return "redirect:/login";
+        }
+        Liquidacion liquidacion = liquidacionService.getLiquidacionById(id).orElse(null);
+        if (liquidacion == null || !liquidacion.getUsuario().getCorreo().equals(arbitro.getCorreo())) {
+            return "redirect:/arbitro/liquidaciones";
+        }
         model.addAttribute("liquidacion", liquidacion);
-        model.addAttribute("asignaciones", asignacionesAceptadas);
+        model.addAttribute("asignaciones", liquidacion.getPartidas());
         return "arbitro/liquidacion-generada";
     }
 
