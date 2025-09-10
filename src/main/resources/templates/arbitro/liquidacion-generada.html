@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b">
@@ -45,24 +47,26 @@
             <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900">Liquidación de Arbitraje</h2>
             </div>
-            
+
             <div class="px-6 py-6">
                 <!-- Información general -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Período</h3>
-                        <p class="text-2xl font-bold text-gray-900" th:text="${liquidacion.mes + '/' + liquidacion.anio}">9/2025</p>
+                        <p class="text-2xl font-bold text-gray-900"
+                            th:text="${liquidacion.mes + '/' + liquidacion.anio}">9/2025</p>
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Monto Total</h3>
-                        <p class="text-2xl font-bold text-green-600" th:text="'$' + ${liquidacion.montoTotal}">$1,250.00</p>
+                        <p class="text-2xl font-bold text-green-600" th:text="'$' + ${liquidacion.montoTotal}">$1,250.00
+                        </p>
                     </div>
                 </div>
 
                 <!-- Detalle de partidos -->
                 <div class="mb-8">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Detalle de Partidos Arbitrados</h3>
-                    
+
                     <div th:if="${asignaciones.empty}" class="text-center py-8">
                         <i class="fas fa-calendar-times text-gray-400 text-3xl mb-3"></i>
                         <p class="text-gray-500">No hay partidos arbitrados en este período</p>
@@ -71,19 +75,25 @@
                     <div th:each="asignacion : ${asignaciones}" class="border border-gray-200 rounded-lg p-4 mb-3">
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
-                                <h4 class="font-medium text-gray-900" th:text="${asignacion.partido.equipoLocal + ' vs ' + asignacion.partido.equipoVisitante}">
-                                    Equipo A vs Equipo B
+                                <h4 class="font-medium text-gray-900"
+                                    th:text="${asignacion.partido != null ? (asignacion.partido.lugar != null ? asignacion.partido.lugar : 'Partido') : 'Partido'}">
+                                    Partido
                                 </h4>
-                                <p class="text-sm text-gray-600" th:text="${asignacion.partido.torneo.nombre}">Torneo de Baloncesto</p>
-                                <p class="text-sm text-gray-500" th:text="${#dates.format(asignacion.partido.fechaHora, 'dd/MM/yyyy HH:mm')}">
+                                <p class="text-sm text-gray-600"
+                                    th:text="${asignacion.partido != null && asignacion.partido.torneo != null ? asignacion.partido.torneo.nombre : 'Torneo'}">
+                                    Torneo de Baloncesto
+                                </p>
+                                <p class="text-sm text-gray-500"
+                                    th:text="${asignacion.partido != null && asignacion.partido.fecha != null && asignacion.partido.hora != null ? asignacion.partido.fecha.toString() + ' ' + asignacion.partido.hora : 'Fecha/Hora'}">
                                     15/09/2025 19:00
                                 </p>
                             </div>
                             <div class="text-right">
-                                <p class="font-medium text-green-600" th:text="'$' + ${asignacion.partido.torneo.getTarifaPorEscalafon(liquidacion.usuario.escalafon)}">
+                                <p class="font-medium text-green-600"
+                                    th:text="'$' + ${asignacion.partido.torneo.getTarifaPorEscalafon(liquidacion.usuario.escalafon)}">
                                     $250.00
                                 </p>
-                                <p class="text-xs text-gray-500" th:text="${asignacion.usuario.escalafon}">FIBA</p>
+                                <p class="text-xs text-gray-500" th:text="${asignacion.arbitro.escalafon}">FIBA</p>
                             </div>
                         </div>
                     </div>
@@ -91,8 +101,8 @@
 
                 <!-- Acciones -->
                 <div class="flex justify-end space-x-3">
-                    <a th:href="@{'/arbitro/liquidaciones/' + ${liquidacion.id} + '/pdf'}" 
-                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                    <a th:href="@{'/arbitro/liquidaciones/' + ${liquidacion.id} + '/pdf'}"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
                         <i class="fas fa-download mr-2"></i>
                         Descargar PDF
                     </a>
@@ -101,4 +111,5 @@
         </div>
     </div>
 </body>
+
 </html>
