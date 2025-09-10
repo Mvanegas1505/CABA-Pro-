@@ -22,6 +22,7 @@ public class Liquidacion {
     @JoinColumn(name = "liquidacion_id")
     private List<Asignacion> partidas;
 
+    private java.math.BigDecimal montoTotal;
     // Métodos del diagrama
     public double calcularTotal() {
         // Sumar los montos de las asignaciones
@@ -40,6 +41,8 @@ public class Liquidacion {
     }
 
     // Getters y setters
+    public java.math.BigDecimal getMontoTotal() { return montoTotal; }
+    public void setMontoTotal(java.math.BigDecimal montoTotal) { this.montoTotal = montoTotal; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

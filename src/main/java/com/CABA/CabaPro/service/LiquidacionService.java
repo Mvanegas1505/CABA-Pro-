@@ -13,6 +13,9 @@ public class LiquidacionService {
     @Autowired
     private LiquidacionRepository liquidacionRepository;
 
+    public List<Liquidacion> getLiquidacionesPorArbitro(String correo) {
+        return liquidacionRepository.findByUsuario_Correo(correo);
+    }
     public List<Liquidacion> getAllLiquidaciones() {
         return liquidacionRepository.findAll();
     }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquidaciones Árbitro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm border-b mb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-3"></i>
+                <h1 class="text-2xl font-bold text-gray-900">CabaPro</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <img th:src="${arbitro != null && arbitro.fotoPerfilUrl != null ? arbitro.fotoPerfilUrl : '/placeholder.svg?height=32&width=32'}" alt="Perfil" class="w-8 h-8 rounded-full">
+                <span class="text-gray-700 font-medium" th:text="${arbitro != null ? arbitro.nombre : 'Árbitro'}">Árbitro</span>
+                <a href="/logout" class="text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-6 flex justify-end">
+            <a href="/arbitro/dashboard" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">Volver al dashboard</a>
+        </div>
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Historial de Liquidaciones</h2>
+            <a href="/arbitro/liquidaciones/generar" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">Generar Liquidación</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-sm">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Período</th>
+                        <th class="px-4 py-2 text-left">Monto</th>
+                            <!-- <th class="px-4 py-2 text-left">Estado</th> -->
+                            <!-- <th class="px-4 py-2 text-left">Fecha de creación</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="liq : ${liquidaciones}">
+                        <td class="px-4 py-2" th:text="${liq.mes + '/' + liq.anio}">Período</td>
+                        <td class="px-4 py-2" th:text="'$' + ${liq.montoTotal}">Monto</td>
+                            <!-- <td class="px-4 py-2">
+                                <span th:if="${liq.estado.name() == 'PENDIENTE'}" class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Pendiente</span>
+                                <span th:if="${liq.estado.name() == 'PAGADA'}" class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Pagada</span>
+                                <span th:if="${liq.estado.name() == 'RECHAZADA'}" class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">Rechazada</span>
+                            </td> -->
+                            <!-- <td class="px-4 py-2" th:text="${#temporals.format(liq.fechaCreacion, 'dd/MM/yyyy')}">Fecha</td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${liquidaciones == null or liquidaciones.empty}" class="text-center py-8">
+            <i class="fas fa-file-invoice-dollar text-gray-300 text-4xl mb-4"></i>
+            <p class="text-gray-500">No tienes liquidaciones generadas</p>
+        </div>
+    </div>
+</body>
+</html>
