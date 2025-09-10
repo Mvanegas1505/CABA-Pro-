@@ -3,35 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liquidación Generada</title>
+    <title>Liquidación Generada - CabaPro</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
-    <header class="bg-white shadow-sm border-b mb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-3"></i>
-                <h1 class="text-2xl font-bold text-gray-900">CabaPro</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <img th:src="${arbitro != null && arbitro.fotoPerfilUrl != null ? arbitro.fotoPerfilUrl : '/placeholder.svg?height=32&width=32'}" alt="Perfil" class="w-8 h-8 rounded-full">
-                <span class="text-gray-700 font-medium" th:text="${arbitro != null ? arbitro.nombre : 'Árbitro'}">Árbitro</span>
-                <a href="/logout" class="text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt"></i></a>
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-2"></i>
+                        <h1 class="text-xl font-bold text-gray-900">CabaPro</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/arbitro/liquidaciones" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                        Volver a liquidaciones
+                    </a>
+                </div>
             </div>
         </div>
     </header>
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 class="text-xl font-bold text-gray-900 mb-6">Liquidación Generada</h2>
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <p class="mb-2"><span class="font-medium">Árbitro:</span> <span th:text="${arbitro.nombre}"></span></p>
-            <p class="mb-2"><span class="font-medium">Correo:</span> <span th:text="${arbitro.correo}"></span></p>
-            <p class="mb-2"><span class="font-medium">Mes:</span> <span th:text="${liquidacion.mes}"></span></p>
-            <p class="mb-2"><span class="font-medium">Año:</span> <span th:text="${liquidacion.anio}"></span></p>
-            <p class="mb-2"><span class="font-medium">Monto Total:</span> <span th:text="'$' + ${liquidacion.montoTotal}"></span></p>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Mensaje de éxito -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-8">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
+                <div>
+                    <h3 class="text-green-800 font-medium">Liquidación generada exitosamente</h3>
+                    <p class="text-green-700 text-sm">Tu liquidación ha sido procesada y está lista para descargar.</p>
+                </div>
+            </div>
         </div>
-        <div class="mt-6">
-            <a href="/arbitro/liquidaciones" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">Volver al historial</a>
+
+        <!-- Detalles de la liquidación -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Liquidación de Arbitraje</h2>
+            </div>
+            
+            <div class="px-6 py-6">
+                <!-- Información general -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Período</h3>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${liquidacion.mes + '/' + liquidacion.anio}">9/2025</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Monto Total</h3>
+                        <p class="text-2xl font-bold text-green-600" th:text="'$' + ${liquidacion.montoTotal}">$1,250.00</p>
+                    </div>
+                </div>
+
+                <!-- Detalle de partidos -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Detalle de Partidos Arbitrados</h3>
+                    
+                    <div th:if="${asignaciones.empty}" class="text-center py-8">
+                        <i class="fas fa-calendar-times text-gray-400 text-3xl mb-3"></i>
+                        <p class="text-gray-500">No hay partidos arbitrados en este período</p>
+                    </div>
+
+                    <div th:each="asignacion : ${asignaciones}" class="border border-gray-200 rounded-lg p-4 mb-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900" th:text="${asignacion.partido.equipoLocal + ' vs ' + asignacion.partido.equipoVisitante}">
+                                    Equipo A vs Equipo B
+                                </h4>
+                                <p class="text-sm text-gray-600" th:text="${asignacion.partido.torneo.nombre}">Torneo de Baloncesto</p>
+                                <p class="text-sm text-gray-500" th:text="${#dates.format(asignacion.partido.fechaHora, 'dd/MM/yyyy HH:mm')}">
+                                    15/09/2025 19:00
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium text-green-600" th:text="'$' + ${asignacion.partido.torneo.getTarifaPorEscalafon(liquidacion.usuario.escalafon)}">
+                                    $250.00
+                                </p>
+                                <p class="text-xs text-gray-500" th:text="${asignacion.usuario.escalafon}">FIBA</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="flex justify-end space-x-3">
+                    <a th:href="@{'/arbitro/liquidaciones/' + ${liquidacion.id} + '/pdf'}" 
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                        <i class="fas fa-download mr-2"></i>
+                        Descargar PDF
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </body>
