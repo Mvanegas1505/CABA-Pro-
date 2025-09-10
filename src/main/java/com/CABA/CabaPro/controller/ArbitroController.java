@@ -31,34 +31,40 @@ public class ArbitroController {
 
     @GetMapping("/arbitro/dashboard")
     public String dashboard(Model model, HttpSession session) {
-        // Obtener el árbitro desde la sesión (guardado en login)
-        Usuario arbitro = (Usuario) session.getAttribute("usuario");
+    // Obtener el árbitro desde la sesión (guardado en login)
+    Usuario arbitroSesion = (Usuario) session.getAttribute("usuario");
+    Usuario arbitro = null;
+    if (arbitroSesion != null && arbitroSesion.getCorreo() != null) {
+        // Consultar el usuario completo por correo
+        arbitro = usuarioService.getUsuarioByCorreo(arbitroSesion.getCorreo());
+    }
+    final Usuario arbitroFinal = arbitro;
 
-        if (arbitro != null) {
-            List<Asignacion> todasAsignaciones = asignacionService.getAllAsignaciones();
+    if (arbitroFinal != null) {
+        List<Asignacion> todasAsignaciones = asignacionService.getAllAsignaciones();
 
-            // Filtrar asignaciones de este árbitro
-            List<Asignacion> asignacionesArbitro = todasAsignaciones.stream()
-                    .filter(a -> a.getArbitro() != null && a.getArbitro().getId().equals(arbitro.getId()))
-                    .collect(Collectors.toList());
+        // Filtrar asignaciones de este árbitro por correo
+        List<Asignacion> asignacionesArbitro = todasAsignaciones.stream()
+            .filter(a -> a.getArbitro() != null && a.getArbitro().getId().equals(arbitroFinal.getId()))
+            .collect(Collectors.toList());
 
-            // Separar por estado
-            List<Asignacion> asignacionesPendientes = asignacionesArbitro.stream()
-                    .filter(a -> a.getEstado() == EstadoAsignacionEnum.PENDIENTE)
-                    .collect(Collectors.toList());
+        // Separar por estado
+        List<Asignacion> asignacionesPendientes = asignacionesArbitro.stream()
+            .filter(a -> a.getEstado() == EstadoAsignacionEnum.PENDIENTE)
+            .collect(Collectors.toList());
 
-            List<Asignacion> asignacionesAceptadas = asignacionesArbitro.stream()
-                    .filter(a -> a.getEstado() == EstadoAsignacionEnum.ACEPTADA)
-                    .collect(Collectors.toList());
+        List<Asignacion> asignacionesAceptadas = asignacionesArbitro.stream()
+            .filter(a -> a.getEstado() == EstadoAsignacionEnum.ACEPTADA)
+            .collect(Collectors.toList());
 
-            model.addAttribute("arbitro", arbitro);
-            model.addAttribute("asignacionesPendientes", asignacionesPendientes);
-            model.addAttribute("asignacionesAceptadas", asignacionesAceptadas);
-            model.addAttribute("totalPendientes", asignacionesPendientes.size());
-            model.addAttribute("totalAceptadas", asignacionesAceptadas.size());
-        }
+        model.addAttribute("arbitro", arbitroFinal);
+        model.addAttribute("asignacionesPendientes", asignacionesPendientes);
+        model.addAttribute("asignacionesAceptadas", asignacionesAceptadas);
+        model.addAttribute("totalPendientes", asignacionesPendientes.size());
+        model.addAttribute("totalAceptadas", asignacionesAceptadas.size());
+    }
 
-        return "arbitro/dashboard";
+    return "arbitro/dashboard";
     }
 
     @PostMapping("/arbitro/aceptar-asignacion/{id}")

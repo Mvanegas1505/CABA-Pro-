@@ -1,7 +1,3 @@
-// ...existing code...
-// ...existing code...
-
-// ...existing code...
 package com.CABA.CabaPro.service;
 
 import java.util.Optional;
@@ -42,6 +38,10 @@ public class UsuarioService {
 
     public Usuario findByCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo).orElse(null);
+    }
+
+    public Usuario getUsuarioByCorreo(String correo) {
+        return findByCorreo(correo);
     }
 
     public boolean loginAdmin(String contrasena) {
