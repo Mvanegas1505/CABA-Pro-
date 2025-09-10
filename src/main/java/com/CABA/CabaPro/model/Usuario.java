@@ -1,3 +1,4 @@
+
 package com.CABA.CabaPro.model;
 
 import jakarta.persistence.*;
@@ -6,12 +7,10 @@ import jakarta.persistence.*;
 @Table(name = "usuarios")
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String nombre;
     @Column(unique = true, nullable = false)
     private String correo;
+
+    private String nombre;
     private String contrasena;
 
     @Enumerated(EnumType.STRING)
@@ -22,12 +21,12 @@ public class Usuario {
     private String escalafon; // Ej: "FIBA", "PRIMERA", "SEGUNDA"
     private String fotoPerfilUrl;
 
-    public Long getId() {
-        return id;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getNombre() {
@@ -36,14 +35,6 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
     }
 
     public String getContrasena() {

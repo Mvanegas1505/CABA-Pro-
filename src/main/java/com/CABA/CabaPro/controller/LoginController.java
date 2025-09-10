@@ -28,6 +28,10 @@ public class LoginController {
         try {
             Usuario usuario = usuarioService.login(loginRequestDTO.getCorreo(), loginRequestDTO.getContrasena());
             if (usuario != null) {
+                // Guardar usuario en sesión
+                org.springframework.web.context.request.RequestAttributes requestAttributes = org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes();
+                jakarta.servlet.http.HttpSession session = (jakarta.servlet.http.HttpSession) requestAttributes.resolveReference(org.springframework.web.context.request.RequestAttributes.REFERENCE_SESSION);
+                session.setAttribute("usuario", usuario);
                 // Redirigir según el rol
                 if (usuario.getRol().name().equals("ADMIN")) {
                     return "redirect:/admin/dashboard";

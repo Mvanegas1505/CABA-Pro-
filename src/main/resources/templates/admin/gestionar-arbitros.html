@@ -189,7 +189,7 @@
                                     class="referee-card border border-gray-200 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
                                     th:data-escalafon="${arbitro.escalafon}"
                                     th:data-especialidad="${arbitro.especialidad}"
-                                    th:attr="data-id=${arbitro.id},data-nombre=${arbitro.nombre}"
+                                    th:attr="data-correo=${arbitro.correo},data-nombre=${arbitro.nombre}"
                                     onclick="selectReferee(this)">
                                     <div class="flex justify-between items-center">
                                         <div>
@@ -227,7 +227,7 @@
 
     <script>
         let selectedPartidoId = null;
-        let selectedArbitroId = null;
+    let selectedArbitroCorreo = null;
 
         function openAssignModal(partidoId) {
             selectedPartidoId = partidoId;
@@ -237,7 +237,7 @@
         function closeAssignModal() {
             document.getElementById('assignModal').classList.add('hidden');
             selectedPartidoId = null;
-            selectedArbitroId = null;
+            selectedArbitroCorreo = null;
             document.getElementById('confirm-assignment').disabled = true;
             // Reset selection
             document.querySelectorAll('.referee-card').forEach(card => {
@@ -246,7 +246,7 @@
         }
 
         function selectReferee(element) {
-            selectedArbitroId = element.getAttribute('data-id');
+            selectedArbitroCorreo = element.getAttribute('data-correo');
             // Reset all cards
             document.querySelectorAll('.referee-card').forEach(card => {
                 card.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
@@ -258,7 +258,7 @@
         }
 
         function confirmAssignment() {
-            if (selectedPartidoId && selectedArbitroId) {
+            if (selectedPartidoId && selectedArbitroCorreo) {
                 // Send assignment request
                 fetch('/admin/asignar-arbitro', {
                     method: 'POST',
@@ -267,7 +267,7 @@
                     },
                     body: JSON.stringify({
                         partidoId: selectedPartidoId,
-                        arbitroId: selectedArbitroId
+                        arbitroCorreo: selectedArbitroCorreo
                     })
                 })
                     .then(response => response.json())

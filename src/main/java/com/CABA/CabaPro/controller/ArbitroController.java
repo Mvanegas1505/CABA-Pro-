@@ -33,37 +33,21 @@ public class ArbitroController {
     public String dashboard(Model model, HttpSession session) {
     // Obtener el árbitro desde la sesión (guardado en login)
     Usuario arbitroSesion = (Usuario) session.getAttribute("usuario");
-    Usuario arbitro = null;
     if (arbitroSesion != null && arbitroSesion.getCorreo() != null) {
         // Consultar el usuario completo por correo
-        arbitro = usuarioService.getUsuarioByCorreo(arbitroSesion.getCorreo());
+        Usuario arbitro = usuarioService.getUsuarioByCorreo(arbitroSesion.getCorreo());
+        if (arbitro != null) {
+            List<Asignacion> asignacionesPendientes = asignacionService.getAsignacionesPendientesPorArbitro(arbitro.getCorreo());
+            List<Asignacion> asignacionesAceptadas = asignacionService.getAsignacionesAceptadasPorArbitro(arbitro.getCorreo());
+
+            model.addAttribute("arbitro", arbitro);
+            model.addAttribute("asignacionesPendientes", asignacionesPendientes);
+            model.addAttribute("asignacionesAceptadas", asignacionesAceptadas);
+            model.addAttribute("totalPendientes", asignacionesPendientes.size());
+            model.addAttribute("totalAceptadas", asignacionesAceptadas.size());
+            model.addAttribute("misPartidos", asignacionesAceptadas);
+        }
     }
-    final Usuario arbitroFinal = arbitro;
-
-    if (arbitroFinal != null) {
-        List<Asignacion> todasAsignaciones = asignacionService.getAllAsignaciones();
-
-        // Filtrar asignaciones de este árbitro por correo
-        List<Asignacion> asignacionesArbitro = todasAsignaciones.stream()
-            .filter(a -> a.getArbitro() != null && a.getArbitro().getId().equals(arbitroFinal.getId()))
-            .collect(Collectors.toList());
-
-        // Separar por estado
-        List<Asignacion> asignacionesPendientes = asignacionesArbitro.stream()
-            .filter(a -> a.getEstado() == EstadoAsignacionEnum.PENDIENTE)
-            .collect(Collectors.toList());
-
-        List<Asignacion> asignacionesAceptadas = asignacionesArbitro.stream()
-            .filter(a -> a.getEstado() == EstadoAsignacionEnum.ACEPTADA)
-            .collect(Collectors.toList());
-
-        model.addAttribute("arbitro", arbitroFinal);
-        model.addAttribute("asignacionesPendientes", asignacionesPendientes);
-        model.addAttribute("asignacionesAceptadas", asignacionesAceptadas);
-        model.addAttribute("totalPendientes", asignacionesPendientes.size());
-        model.addAttribute("totalAceptadas", asignacionesAceptadas.size());
-    }
-
     return "arbitro/dashboard";
     }
 
@@ -77,5 +61,17 @@ public class ArbitroController {
     public String rechazarAsignacion(@PathVariable Long id) {
         asignacionService.rechazarAsignacion(id);
         return "redirect:/arbitro/dashboard";
+    }
+
+    @GetMapping("/arbitro/partidos")
+    public String verPartidosAceptados(HttpSession session, Model model) {
+        Usuario arbitro = (Usuario) session.getAttribute("usuario");
+        if (arbitro == null) {
+            return "redirect:/login";
+        }
+        List<Asignacion> misPartidos = asignacionService.getAsignacionesAceptadasPorArbitro(arbitro.getCorreo());
+        model.addAttribute("arbitro", arbitro);
+        model.addAttribute("misPartidos", misPartidos);
+        return "arbitro/partidos";
     }
 }

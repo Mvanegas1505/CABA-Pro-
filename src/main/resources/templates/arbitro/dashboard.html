@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body class="bg-gray-50">
-    <!-- Header limpio sin especialidad/escalafón/foto de perfil extra -->
+
+    <!-- Header -->
     <header class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
@@ -20,9 +19,9 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <img th:src="${arbitro != null && arbitro.fotoPerfilUrl != null ? arbitro.fotoPerfilUrl : '/placeholder.svg?height=32&width=32'}"
-                        alt="Perfil" class="w-8 h-8 rounded-full">
+                         alt="Perfil" class="w-8 h-8 rounded-full">
                     <span class="text-gray-700 font-medium"
-                        th:text="${arbitro != null ? arbitro.nombre + ' ' + arbitro.apellido : 'Árbitro'}">Árbitro</span>
+                          th:text="${arbitro != null ? arbitro.nombre : 'Árbitro'}">Árbitro</span>
                     <a href="/logout" class="text-red-500 hover:text-red-700">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
@@ -32,69 +31,61 @@
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         <!-- Profile Summary -->
-        <!-- Updated profile section with real user data -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <!-- Profile Card Mejorado: Solo nombre y usuario -->
-            <div class="bg-white rounded-lg shadow-sm p-6 flex items-center mb-8">
-                <img src="/placeholder.svg?height=80&width=80" alt="Avatar"
-                    class="w-20 h-20 rounded-full object-cover mr-6">
+            <div class="flex items-center">
+                <img th:src="${arbitro != null && arbitro.fotoPerfilUrl != null ? arbitro.fotoPerfilUrl : '/placeholder.svg?height=80&width=80'}"
+                     alt="Avatar" class="w-20 h-20 rounded-full object-cover mr-6">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 mb-1"
-                        th:text="${arbitro != null ? arbitro.nombre + ' ' + arbitro.apellido : 'Nombre del Árbitro'}">
-                        Nombre del Árbitro</h1>
+                        th:text="${arbitro != null ? arbitro.nombre : 'Nombre del Árbitro'}">
+                        Nombre del Árbitro
+                    </h1>
                     <p class="text-gray-600 mb-2">
-                        <span class="font-medium">Usuario:</span> <span
-                            th:text="${arbitro != null ? arbitro.username : 'usuario'}">usuario</span>
+                        <span class="font-medium">Usuario:</span>
+                        <span th:text="${arbitro != null ? arbitro.correo : 'usuario'}">usuario</span>
                     </p>
                 </div>
                 <a href="/arbitro/perfil"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors ml-auto">
+                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors ml-auto">
                     Editar Perfil
                 </a>
             </div>
         </div>
 
         <!-- Notifications -->
-        <!-- Updated notifications to show real pending assignments -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Notificaciones Pendientes</h2>
 
+            <!-- Lista de notificaciones -->
             <div class="space-y-4" th:if="${asignacionesPendientes != null and !asignacionesPendientes.empty}">
                 <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg"
-                    th:each="asignacion : ${asignacionesPendientes}">
+                     th:each="asignacion : ${asignacionesPendientes}">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="font-bold text-blue-900">Nueva asignación de partido</h3>
                             <p class="text-blue-800 mt-1" th:text="${asignacion.partido.torneo.nombre}">Torneo</p>
                             <p class="text-sm text-blue-600 mt-1">
                                 <i class="fas fa-clock mr-1"></i>
-                                <span
-                                    th:text="${#dates.format(asignacion.partido.fecha, 'dd/MM/yyyy')} + ', ' + ${asignacion.partido.hora}">Fecha
-                                    y hora</span>
+                                <span th:text="${#temporals.format(asignacion.partido.fecha, 'dd/MM/yyyy')} + ', ' + ${asignacion.partido.hora}">Fecha y hora</span>
                                 • <span th:text="${asignacion.partido.lugar}">Lugar</span>
                             </p>
                             <p class="text-sm text-blue-600 mt-1">
                                 <i class="fas fa-user-tie mr-1"></i>
-                                <span
-                                    th:text="${asignacion.rol == 'CAMPO' ? 'Árbitro de Campo' : 'Árbitro de Mesa'}">Rol</span>
-                                • <i class="fas fa-dollar-sign mr-1"></i>
-                                <span
-                                    th:text="'$' + ${asignacion.partido.tarifa != null ? asignacion.partido.tarifa.monto : 0}">Tarifa</span>
+                                <span th:text="${asignacion.especialidad}">Rol</span>
                             </p>
                         </div>
                         <div class="flex space-x-2">
-                            <form th:action="@{/arbitro/aceptar-asignacion/{id}(id=${asignacion.id})}" method="post"
-                                style="display: inline;">
+                            <form th:action="@{/arbitro/aceptar-asignacion/{id}(id=${asignacion.id})}" method="post">
                                 <button type="submit"
-                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                                     Aceptar
                                 </button>
                             </form>
-                            <form th:action="@{/arbitro/rechazar-asignacion/{id}(id=${asignacion.id})}" method="post"
-                                style="display: inline;">
+                            <form th:action="@{/arbitro/rechazar-asignacion/{id}(id=${asignacion.id})}" method="post">
                                 <button type="submit"
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                                     Rechazar
                                 </button>
                             </form>
@@ -103,7 +94,7 @@
                 </div>
             </div>
 
-            <!-- Added empty state for no pending notifications -->
+            <!-- Estado vacío -->
             <div th:if="${asignacionesPendientes == null or asignacionesPendientes.empty}" class="text-center py-8">
                 <i class="fas fa-bell-slash text-gray-300 text-4xl mb-4"></i>
                 <p class="text-gray-500">No tienes notificaciones pendientes</p>
@@ -111,83 +102,64 @@
         </div>
 
         <!-- My Matches -->
-        <!-- Updated matches section to show real assigned matches -->
         <div class="bg-white rounded-lg shadow-sm p-6">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-gray-900">Mis Partidos</h2>
                 <div class="flex space-x-2">
                     <a href="/arbitro/partidos"
-                        class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                       class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                         Todos
-                    </a>
-                    <a href="/arbitro/partidos?filter=proximos"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
-                        Próximos
                     </a>
                 </div>
             </div>
 
+            <!-- Lista de partidos -->
             <div class="space-y-4" th:if="${misPartidos != null and !misPartidos.empty}">
                 <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                    th:each="asignacion : ${misPartidos}">
+                     th:each="asignacion : ${misPartidos}">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
-                            <img src="/placeholder.svg?height=60&width=60" alt="Cancha"
-                                class="w-15 h-15 rounded-lg object-cover">
                             <div>
-                                <h3 class="font-bold text-gray-900" th:text="${asignacion.partido.torneo.nombre}">Torneo
-                                </h3>
-                                <div class="flex items-center text-sm text-gray-600 mt-1">
+                                <h3 class="font-bold text-gray-900" th:text="${asignacion.partido.torneo.nombre}">Torneo</h3>
+                                <p class="text-sm text-gray-600 mt-1">
                                     <i class="fas fa-map-marker-alt mr-1"></i>
                                     <span th:text="${asignacion.partido.lugar}">Lugar</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600 mt-1">
+                                </p>
+                                <p class="text-sm text-blue-600 mt-1">
                                     <i class="fas fa-clock mr-1"></i>
-                                    <span
-                                        th:text="${#dates.format(asignacion.partido.fecha, 'dd/MM/yyyy')} + ', ' + ${asignacion.partido.hora}">Fecha
-                                        y hora</span>
-                                    <span class="mx-2">•</span>
+                                    <span th:text="${#temporals.format(asignacion.partido.fecha, 'dd/MM/yyyy')} + ', ' + ${asignacion.partido.hora}">Fecha y hora</span>
+                                </p>
+                                <p class="text-sm text-blue-600 mt-1">
                                     <i class="fas fa-user-tie mr-1"></i>
-                                    <span
-                                        th:text="${asignacion.rol == 'CAMPO' ? 'Árbitro de Campo' : 'Árbitro de Mesa'}">Rol</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600 mt-1">
-                                    <i class="fas fa-dollar-sign mr-1"></i>
-                                    <span
-                                        th:text="'$' + ${asignacion.partido.tarifa != null ? asignacion.partido.tarifa.monto : 0}">Tarifa</span>
-                                </div>
+                                    <span th:text="${asignacion.especialidad}">Rol</span>
+                                </p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <!-- Dynamic status based on assignment state -->
                             <span th:if="${asignacion.estado.name() == 'ACEPTADA'}"
-                                class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                  class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                                 Confirmado
                             </span>
                             <span th:if="${asignacion.estado.name() == 'PENDIENTE'}"
-                                class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                                  class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
                                 Pendiente
                             </span>
                             <span th:if="${asignacion.estado.name() == 'RECHAZADA'}"
-                                class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                                  class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
                                 Rechazado
                             </span>
-                            <a th:href="@{/arbitro/partidos/{id}(id=${asignacion.partido.id})}"
-                                class="text-blue-500 hover:text-blue-700 font-medium">
-                                Ver detalles
-                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Added empty state when no matches are assigned -->
+            <!-- Estado vacío -->
             <div th:if="${misPartidos == null or misPartidos.empty}" class="text-center py-8">
                 <i class="fas fa-calendar-times text-gray-300 text-4xl mb-4"></i>
                 <p class="text-gray-500">No tienes partidos asignados</p>
             </div>
         </div>
+
     </div>
 </body>
-
 </html>

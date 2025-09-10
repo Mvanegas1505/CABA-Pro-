@@ -33,6 +33,11 @@ public class UsuarioController {
             @org.springframework.web.bind.annotation.ModelAttribute RegistroArbitroDTO registroArbitroDTO,
             org.springframework.ui.Model model) {
         try {
+            // Verificar si el correo ya existe
+            if (usuarioService.findByCorreo(registroArbitroDTO.getCorreo()) != null) {
+                model.addAttribute("error", "El correo ya está registrado. Por favor usa otro correo.");
+                return "user/registro";
+            }
             Usuario usuario = new Usuario();
             usuario.setNombre(registroArbitroDTO.getNombre());
             usuario.setCorreo(registroArbitroDTO.getCorreo());
@@ -97,7 +102,7 @@ public class UsuarioController {
             this.contrasena = contrasena;
         }
     }
-
+    
     public static class CambiarContrasenaRequest {
         private String correo;
         private String contrasenaAntigua;

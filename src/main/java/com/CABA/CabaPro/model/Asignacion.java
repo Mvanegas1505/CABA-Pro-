@@ -17,7 +17,7 @@ public class Asignacion {
     private EstadoAsignacionEnum estado;
 
     @ManyToOne
-    @JoinColumn(name = "arbitro_id")
+    @JoinColumn(name = "arbitro_correo", referencedColumnName = "correo")
     private Usuario arbitro;
 
     @ManyToOne

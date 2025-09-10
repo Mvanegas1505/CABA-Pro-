@@ -11,6 +11,13 @@ import java.util.Optional;
 
 @Service
 public class AsignacionService {
+    public List<Asignacion> getAsignacionesPendientesPorArbitro(String correo) {
+        return asignacionRepository.findByArbitroCorreoAndEstado(correo, EstadoAsignacionEnum.PENDIENTE);
+    }
+
+    public List<Asignacion> getAsignacionesAceptadasPorArbitro(String correo) {
+        return asignacionRepository.findByArbitroCorreoAndEstado(correo, EstadoAsignacionEnum.ACEPTADA);
+    }
 
     @Autowired
     private AsignacionRepository asignacionRepository;

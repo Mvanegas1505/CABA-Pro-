@@ -67,26 +67,25 @@ public class AdminController {
         
         try {
             // Validar parámetros de entrada
-            if (!payload.containsKey("partidoId") || !payload.containsKey("arbitroId")) {
+            if (!payload.containsKey("partidoId") || !payload.containsKey("arbitroCorreo")) {
                 response.put("success", false);
                 response.put("message", "Faltan parámetros requeridos");
                 return response;
             }
 
             Long partidoId = Long.valueOf(payload.get("partidoId").toString());
-            Long arbitroId = Long.valueOf(payload.get("arbitroId").toString());
+            String arbitroCorreo = payload.get("arbitroCorreo").toString();
 
             Optional<Partido> partidoOpt = partidoService.getPartidoById(partidoId);
-            Optional<Usuario> arbitroOpt = usuarioService.getUsuarioById(arbitroId); // Cambiado a método más específico
+            Usuario arbitro = usuarioService.findByCorreo(arbitroCorreo);
 
-            if (partidoOpt.isEmpty() || arbitroOpt.isEmpty()) {
+            if (partidoOpt.isEmpty() || arbitro == null) {
                 response.put("success", false);
                 response.put("message", "Partido o árbitro no encontrado");
                 return response;
             }
 
             Partido partido = partidoOpt.get();
-            Usuario arbitro = arbitroOpt.get();
 
             // Validar que el usuario sea árbitro
             if (arbitro.getRol() == null || !arbitro.getRol().name().equals("ARBITRO")) {
