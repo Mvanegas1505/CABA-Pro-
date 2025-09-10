@@ -43,6 +43,7 @@ public class UsuarioController {
             usuario.setCorreo(registroArbitroDTO.getCorreo());
             usuario.setContrasena(registroArbitroDTO.getContrasena());
             usuario.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
+               usuario.setEspecialidad(null); // Inicializa como null
             usuarioService.crearUsuario(usuario.getNombre(), usuario.getContrasena(), usuario.getCorreo());
             model.addAttribute("usuario", usuario);
             return "redirect:/perfil?correo=" + usuario.getCorreo();
@@ -79,7 +80,6 @@ public class UsuarioController {
         return "redirect:/arbitro/dashboard";
     }
 
-    // Cambiar contraseña (POST)
     @PostMapping("/cambiar-contrasena")
     public String cambiarContrasena(@RequestBody CambiarContrasenaRequest req) {
         try {
