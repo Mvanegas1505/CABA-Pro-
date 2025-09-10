@@ -75,16 +75,31 @@ public class AdminController {
     @GetMapping("/admin/arbitros")
     public String gestionarArbitros(Model model) {
 
-        List<Partido> partidos = partidoService.getAllPartidos();
-        List<Usuario> usuarios = usuarioService.getAllUsuarios().stream()
-                .filter(u -> u.getRol() != null && u.getRol().name().equals("ARBITRO"))
-                .collect(Collectors.toList());
-        List<Torneo> torneos = torneoService.getAllTorneos();
+                List<Partido> partidos = partidoService.getAllPartidos();
+                List<Usuario> arbitros = usuarioService.getAllUsuarios().stream()
+                                .filter(u -> u.getRol() != null && u.getRol().name().equals("ARBITRO"))
+                                .collect(Collectors.toList());
+                List<Torneo> torneos = torneoService.getAllTorneos();
 
-        model.addAttribute("partidos", partidos);
-        model.addAttribute("Usuarios", usuarios);
-        model.addAttribute("torneos", torneos);
+                // Crear estructura de árbitros disponibles por especialidad para cada partido
+                java.util.Map<Long, java.util.Map<com.CABA.CabaPro.model.EspecialidadEnum, java.util.List<Usuario>>> arbitrosDisponiblesPorPartido = new java.util.HashMap<>();
+                for (Partido partido : partidos) {
+                        java.util.Map<com.CABA.CabaPro.model.EspecialidadEnum, java.util.List<Usuario>> porEspecialidad = new java.util.HashMap<>();
+                        for (com.CABA.CabaPro.model.EspecialidadEnum especialidad : com.CABA.CabaPro.model.EspecialidadEnum.values()) {
+                                java.util.List<Usuario> disponibles = arbitros.stream()
+                                        .filter(a -> a.getEspecialidad() != null && a.getEspecialidad().equalsIgnoreCase(especialidad.name()))
+                                        .filter(a -> partido.getAsignaciones().stream().noneMatch(asig -> asig.getEspecialidad() == especialidad))
+                                        .collect(Collectors.toList());
+                                porEspecialidad.put(especialidad, disponibles);
+                        }
+                        arbitrosDisponiblesPorPartido.put(partido.getId(), porEspecialidad);
+                }
 
-        return "admin/gestionar-arbitros";
+                model.addAttribute("partidos", partidos);
+                model.addAttribute("arbitros", arbitros);
+                model.addAttribute("torneos", torneos);
+                model.addAttribute("arbitrosDisponiblesPorPartido", arbitrosDisponiblesPorPartido);
+
+                return "admin/gestionar-arbitros";
     }
 }

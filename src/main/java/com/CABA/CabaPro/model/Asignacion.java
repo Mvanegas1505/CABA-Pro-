@@ -37,8 +37,8 @@ public class Asignacion {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public EspecialidadEnum getRol() { return especialidad; }
-    public void setRol(EspecialidadEnum especialidad) { this.especialidad = especialidad; }
+    public EspecialidadEnum getEspecialidad() { return especialidad; }
+    public void setEspecialidad(EspecialidadEnum especialidad) { this.especialidad = especialidad; }
 
     public EstadoAsignacionEnum getEstado() { return estado; }
     public void setEstado(EstadoAsignacionEnum estado) { this.estado = estado; }
