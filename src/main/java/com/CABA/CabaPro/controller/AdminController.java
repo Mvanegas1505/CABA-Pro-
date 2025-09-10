@@ -27,6 +27,23 @@ import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
+    // ==============================================
+    // Remover asignación
+    // ==============================================
+    @org.springframework.web.bind.annotation.DeleteMapping("/admin/remover-asignacion/{id}")
+    @ResponseBody
+    public Map<String, Object> removerAsignacion(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            asignacionService.deleteAsignacion(id);
+            response.put("success", true);
+            response.put("message", "Asignación eliminada correctamente");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al eliminar la asignación: " + e.getMessage());
+        }
+        return response;
+    }
 
     @Autowired
     private PartidoService partidoService;
