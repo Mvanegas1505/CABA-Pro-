@@ -154,10 +154,7 @@
                                 class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
                                 Pendiente
                             </span>
-                            <a th:href="@{/admin/partidos/{id}(id=${partido.id})}"
-                                class="text-gray-400 hover:text-gray-600">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </a>
+                            <!-- Botón de opciones (tres puntitos) eliminado a petición del usuario -->
                         </div>
                     </div>
                 </div>
@@ -177,11 +174,11 @@
                     <h2 class="text-xl font-bold text-gray-900">Torneos</h2>
                     <a href="/admin/crear-torneo" class="text-blue-500 hover:text-blue-700 font-medium">Crear torneo</a>
                 </div>
-                
+
                 <div class="space-y-4" th:if="${torneos != null and !torneos.empty}">
                     <div class="border border-gray-200 rounded-lg overflow-hidden" th:each="torneo : ${torneos}">
                         <!-- Tournament Header -->
-                        <div class="p-4 cursor-pointer hover:bg-gray-50 transition-colors" 
+                        <div class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                             th:onclick="'toggleTorneo(' + ${torneo.id} + ')'">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-4">
@@ -197,26 +194,26 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span th:if="${torneo.fechaFin != null and torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}" 
+                                    <span th:if="${torneo.fechaFin != null and torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
                                         class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
                                         Finalizado
                                     </span>
-                                    <span th:if="${torneo.fechaFin != null and !torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}" 
+                                    <span th:if="${torneo.fechaFin != null and !torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
                                         class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                                         Activo
                                     </span>
-                                    <i class="fas fa-chevron-down text-gray-400 transform transition-transform" 
+                                    <i class="fas fa-chevron-down text-gray-400 transform transition-transform"
                                     th:id="'chevron-' + ${torneo.id}"></i>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Tournament Matches (Hidden by default) -->
                         <div class="border-t bg-gray-50 hidden" th:id="'partidos-' + ${torneo.id}">
                             <div class="p-4">
                                 <h4 class="font-medium text-gray-900 mb-3">Partidos del Torneo</h4>
                                 <div class="space-y-3" th:if="${torneo.partidos != null and !torneo.partidos.empty}">
-                                    <div class="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow" 
+                                    <div class="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow"
                                         th:each="partido : ${torneo.partidos}">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-3">
@@ -235,7 +232,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 4}" 
+                                                <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 4}"
                                                     class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
                                                     Completo
                                                 </span>
@@ -243,11 +240,11 @@
                                                     class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
                                                     Parcial
                                                 </span>
-                                                <span th:if="${partido.asignaciones == null or partido.asignaciones.size() == 0}" 
+                                                <span th:if="${partido.asignaciones == null or partido.asignaciones.size() == 0}"
                                                     class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
                                                     Sin asignar
                                                 </span>
-                                                <a th:href="@{/admin/arbitros}" 
+                                                <a th:href="@{/admin/arbitros}"
                                                     class="text-blue-500 hover:text-blue-700 text-sm font-medium">
                                                     Gestionar
                                                 </a>
@@ -255,12 +252,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div th:if="${torneo.partidos == null or torneo.partidos.empty}" 
+
+                                <div th:if="${torneo.partidos == null or torneo.partidos.empty}"
                                     class="text-center py-6">
                                     <i class="fas fa-calendar-plus text-gray-300 text-2xl mb-2"></i>
                                     <p class="text-gray-500 text-sm">No hay partidos programados</p>
-                                    <a th:href="@{/admin/partidos/crear?torneo={id}(id=${torneo.id})}" 
+                                    <a th:href="@{/admin/partidos/crear?torneo={id}(id=${torneo.id})}"
                                     class="text-blue-500 hover:text-blue-700 text-sm font-medium">
                                         Programar primer partido
                                     </a>
@@ -283,7 +280,7 @@
             function toggleTorneo(torneoId) {
                 const partidosDiv = document.getElementById('partidos-' + torneoId);
                 const chevron = document.getElementById('chevron-' + torneoId);
-                
+
                 if (partidosDiv.classList.contains('hidden')) {
                     partidosDiv.classList.remove('hidden');
                     chevron.classList.add('rotate-180');
