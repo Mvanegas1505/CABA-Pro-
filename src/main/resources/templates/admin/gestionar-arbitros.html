@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Árbitros - CabaPro Admin</title>
+    <title th:text="#{admin.manageReferees.title}">Gestionar Árbitros - CabaPro Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/globals.css}">
@@ -18,12 +18,14 @@
                 <div class="flex items-center">
                     <a th:href="@{/admin/dashboard}" class="flex items-center space-x-2">
                         <i class="fas fa-arrow-left text-gray-600 hover:text-gray-800"></i>
-                        <span class="text-gray-600 hover:text-gray-800">Volver al Dashboard</span>
+                        <span class="text-gray-600 hover:text-gray-800" th:text="#{admin.backToDashboard}">Volver al
+                            Dashboard</span>
                     </a>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600">Administrador</span>
-                    <i class="fas fa-user-circle text-2xl text-gray-600"></i>
+                <div class="flex items-center space-x-2">
+                    <a th:href="@{?lang=es}" class="text-xs text-gray-500 hover:text-gray-700">ES</a>
+                    <span class="text-gray-300">|</span>
+                    <a th:href="@{?lang=en}" class="text-xs text-gray-500 hover:text-gray-700">EN</a>
                 </div>
             </div>
         </div>
@@ -32,8 +34,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Page Title -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Gestionar Árbitros</h1>
-            <p class="text-gray-600 mt-2">Asigna árbitros a partidos según escalafón y especialidad</p>
+            <h1 class="text-3xl font-bold text-gray-900" th:text="#{admin.manageReferees.heading}">Gestionar Árbitros
+            </h1>
+            <p class="text-gray-600 mt-2" th:text="#{admin.manageReferees.subtitle}">Asigna árbitros a partidos según
+                escalafón y especialidad</p>
         </div>
 
         <!-- Aquí puedes agregar un título o mensaje si lo deseas, pero sin filtros -->
@@ -86,7 +90,8 @@
 
                     <!-- Árbitros Asignados -->
                     <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-900 mb-3">Árbitros Asignados</h4>
+                        <h4 class="text-lg font-medium text-gray-900 mb-3" th:text="#{admin.manageReferees.assigned}">
+                            Árbitros Asignados</h4>
                         <div th:if="${partido.asignaciones.size() > 0}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div th:each="asignacion : ${partido.asignaciones}" class="bg-gray-50 rounded-lg p-4">
                                 <div class="flex items-center justify-between mb-2">
@@ -94,15 +99,18 @@
                                         th:text="${asignacion.arbitro.nombre}">Nombre árbitro</span>
                                     <span th:if="${asignacion.estado.name() == 'ACEPTADA'}"
                                         class="text-green-600 text-sm">
-                                        <i class="fas fa-check-circle"></i> Aceptado
+                                        <i class="fas fa-check-circle"></i> <span
+                                            th:text="#{admin.status.complete}">Aceptado</span>
                                     </span>
                                     <span th:if="${asignacion.estado.name() == 'PENDIENTE'}"
                                         class="text-yellow-600 text-sm">
-                                        <i class="fas fa-clock"></i> Pendiente
+                                        <i class="fas fa-clock"></i> <span
+                                            th:text="#{admin.matches.pending}">Pendiente</span>
                                     </span>
                                     <span th:if="${asignacion.estado.name() == 'RECHAZADA'}"
                                         class="text-red-600 text-sm">
-                                        <i class="fas fa-times-circle"></i> Rechazado
+                                        <i class="fas fa-times-circle"></i> <span
+                                            th:text="#{admin.status.unassigned}">Rechazado</span>
                                     </span>
                                 </div>
                                 <div class="text-sm text-gray-600">
@@ -111,13 +119,14 @@
                                 </div>
                                 <button class="mt-2 text-red-600 hover:text-red-800 text-sm"
                                     th:onclick="'removeAssignment(' + ${asignacion.id} + ')'">
-                                    <i class="fas fa-trash mr-1"></i>Remover
+                                    <i class="fas fa-trash mr-1"></i><span
+                                        th:text="#{admin.manageReferees.remove}">Remover</span>
                                 </button>
                             </div>
                         </div>
                         <div th:if="${partido.asignaciones.size() == 0}" class="text-gray-500 text-center py-8">
                             <i class="fas fa-user-slash text-4xl mb-2"></i>
-                            <p>No hay árbitros asignados a este partido</p>
+                            <p th:text="#{admin.manageReferees.noAssigned}">No hay árbitros asignados a este partido</p>
                         </div>
                     </div>
 
@@ -125,7 +134,8 @@
                     <div class="flex justify-end">
                         <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
                             th:onclick="'openAssignModal(' + ${partido.id} + ')'">
-                            <i class="fas fa-plus mr-2"></i>Asignar Árbitro
+                            <i class="fas fa-plus mr-2"></i><span
+                                th:text="#{admin.manageReferees.assignReferee}">Asignar Árbitro</span>
                         </button>
                     </div>
                 </div>
@@ -134,11 +144,14 @@
             <!-- Empty State -->
             <div th:if="${partidos.size() == 0}" class="text-center py-12">
                 <i class="fas fa-calendar-times text-6xl text-gray-300 mb-4"></i>
-                <h3 class="text-xl font-medium text-gray-900 mb-2">No hay partidos disponibles</h3>
-                <p class="text-gray-600 mb-4">Crea un partido para comenzar a asignar árbitros</p>
+                <h3 class="text-xl font-medium text-gray-900 mb-2" th:text="#{admin.manageReferees.emptyTitle}">No hay
+                    partidos disponibles</h3>
+                <p class="text-gray-600 mb-4" th:text="#{admin.manageReferees.emptySubtitle}">Crea un partido para
+                    comenzar a asignar árbitros</p>
                 <a th:href="@{/admin/crear-partido}"
                     class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Crear Partido
+                    <i class="fas fa-plus mr-2"></i><span th:text="#{admin.manageReferees.createMatch}">Crear
+                        Partido</span>
                 </a>
             </div>
         </div>
@@ -159,7 +172,8 @@
                     <!-- Referee Selection -->
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por escalafón</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2"
+                                th:text="#{admin.manageReferees.filterRank}">Filtrar por escalafón</label>
                             <select id="escalafon-filter"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
                                 <option value="">Todos</option>
@@ -170,7 +184,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por especialidad</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2"
+                                th:text="#{admin.manageReferees.filterRole}">Filtrar por especialidad</label>
                             <select id="especialidad-filter"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
                                 <option value="">Todas</option>
@@ -183,7 +198,8 @@
 
                         <!-- Available Referees -->
                         <div class="max-h-64 overflow-y-auto">
-                            <h4 class="text-sm font-medium text-gray-700 mb-2">Árbitros Disponibles</h4>
+                            <h4 class="text-sm font-medium text-gray-700 mb-2"
+                                th:text="#{admin.manageReferees.available}">Árbitros Disponibles</h4>
                             <div id="available-referees" class="space-y-2">
                                 <div th:each="arbitro : ${arbitros}"
                                     class="referee-card border border-gray-200 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
@@ -193,15 +209,16 @@
                                     onclick="selectReferee(this)">
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <p class="font-medium text-gray-900"
-                                                th:text="${arbitro.nombre}">Nombre árbitro</p>
+                                            <p class="font-medium text-gray-900" th:text="${arbitro.nombre}">Nombre
+                                                árbitro</p>
                                             <p class="text-sm text-gray-600">
                                                 <span th:text="${arbitro.escalafon}">FIBA</span> •
                                                 <span th:text="${arbitro.especialidad}">PRINCIPAL</span>
                                             </p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="text-sm font-medium text-green-600">Disponible</p>
+                                            <p class="text-sm font-medium text-green-600"
+                                                th:text="#{admin.manageReferees.availableStatus}">Disponible</p>
                                         </div>
                                     </div>
                                 </div>
@@ -212,12 +229,12 @@
                     <div class="flex justify-end space-x-3 mt-6">
                         <button onclick="closeAssignModal()"
                             class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">
-                            Cancelar
+                            <span th:text="#{admin.cancel}">Cancelar</span>
                         </button>
                         <button id="confirm-assignment" onclick="confirmAssignment()"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                             disabled>
-                            Asignar Árbitro
+                            <span th:text="#{admin.manageReferees.confirm}">Asignar Árbitro</span>
                         </button>
                     </div>
                 </div>
@@ -225,9 +242,9 @@
         </div>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         let selectedPartidoId = null;
-    let selectedArbitroCorreo = null;
+        let selectedArbitroCorreo = null;
 
         function openAssignModal(partidoId) {
             selectedPartidoId = partidoId;
@@ -275,12 +292,12 @@
                         if (data.success) {
                             location.reload();
                         } else {
-                            alert('Error al asignar árbitro: ' + data.message);
+                            alert('[[#{admin.error.assign}]]: ' + data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Error al asignar árbitro');
+                        alert('[[#{admin.error.assign}]]');
                     });
 
                 closeAssignModal();
@@ -288,7 +305,7 @@
         }
 
         function removeAssignment(asignacionId) {
-            if (confirm('¿Estás seguro de que quieres remover esta asignación?')) {
+            if (confirm('[[#{admin.manageReferees.removeConfirm}]]')) {
                 fetch('/admin/remover-asignacion/' + asignacionId, {
                     method: 'DELETE'
                 })
@@ -297,12 +314,12 @@
                         if (data.success) {
                             location.reload();
                         } else {
-                            alert('Error al remover asignación: ' + data.message);
+                            alert('[[#{admin.error.remove}]]: ' + data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Error al remover asignación');
+                        alert('[[#{admin.error.remove}]]');
                     });
             }
         }

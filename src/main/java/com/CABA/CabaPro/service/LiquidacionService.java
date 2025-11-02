@@ -32,6 +32,10 @@ public class LiquidacionService {
         return liquidacionRepository.findById(id);
     }
 
+    public Optional<Liquidacion> getUltimaLiquidacionPorCorreo(String correo) {
+        return liquidacionRepository.findTopByUsuario_CorreoOrderByIdDesc(correo);
+    }
+
     public Liquidacion saveLiquidacion(Liquidacion liquidacion) {
         return liquidacionRepository.save(liquidacion);
     }
