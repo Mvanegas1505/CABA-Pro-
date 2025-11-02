@@ -87,12 +87,22 @@ public class LiquidacionController {
     }
 
     @GetMapping("/arbitro/liquidaciones/generada")
-    public String verLiquidacionGenerada(@RequestParam Long id, HttpSession session, Model model) {
+    public String verLiquidacionGenerada(@RequestParam(required = false) Long id, HttpSession session, Model model) {
         Usuario arbitro = (Usuario) session.getAttribute("usuario");
         if (arbitro == null) {
             return "redirect:/login";
         }
-        Liquidacion liquidacion = liquidacionService.getLiquidacionById(id).orElse(null);
+        Liquidacion liquidacion = null;
+        if (id != null) {
+            liquidacion = liquidacionService.getLiquidacionById(id).orElse(null);
+        } else {
+            // Fallback: si no se envía id, intentar cargar la última liquidación del
+            // árbitro
+            liquidacion = liquidacionService.getUltimaLiquidacionPorCorreo(arbitro.getCorreo()).orElse(null);
+            if (liquidacion == null) {
+                return "redirect:/arbitro/liquidaciones";
+            }
+        }
         if (liquidacion == null || !liquidacion.getUsuario().getCorreo().equals(arbitro.getCorreo())) {
             return "redirect:/arbitro/liquidaciones";
         }

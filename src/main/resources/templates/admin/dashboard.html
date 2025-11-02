@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrador - CabaPro</title>
+    <title th:text="#{admin.dashboard.title}">Dashboard Administrador - CabaPro</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -16,7 +16,7 @@
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
                     <i class="fas fa-basketball-ball text-orange-500 text-2xl mr-3"></i>
-                    <h1 class="text-2xl font-bold text-gray-900">CabaPro Admin</h1>
+                    <h1 class="text-2xl font-bold text-gray-900" th:text="#{admin.app}">CabaPro Admin</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Added dynamic user name from session -->
@@ -25,6 +25,11 @@
                     <a href="/logout" class="text-red-500 hover:text-red-700">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
+                    <div class="flex items-center space-x-2">
+                        <a th:href="@{?lang=es}" class="text-xs text-gray-500 hover:text-gray-700">ES</a>
+                        <span class="text-gray-300">|</span>
+                        <a th:href="@{?lang=en}" class="text-xs text-gray-500 hover:text-gray-700">EN</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,7 +45,8 @@
                         <i class="fas fa-trophy text-blue-500 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Torneos Activos</p>
+                        <p class="text-sm text-gray-600" th:text="#{admin.dashboard.activeTournaments}">Torneos Activos
+                        </p>
                         <p class="text-2xl font-bold text-gray-900" th:text="${torneosActivos ?: 0}">0</p>
                     </div>
                 </div>
@@ -52,7 +58,7 @@
                         <i class="fas fa-calendar text-green-500 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Partidos Hoy</p>
+                        <p class="text-sm text-gray-600" th:text="#{admin.dashboard.matchesToday}">Partidos Hoy</p>
                         <p class="text-2xl font-bold text-gray-900" th:text="${partidosHoy ?: 0}">0</p>
                     </div>
                 </div>
@@ -64,7 +70,8 @@
                         <i class="fas fa-users text-purple-500 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Árbitros Activos</p>
+                        <p class="text-sm text-gray-600" th:text="#{admin.dashboard.activeReferees}">Árbitros Activos
+                        </p>
                         <p class="text-2xl font-bold text-gray-900" th:text="${arbitrosActivos ?: 0}">0</p>
                     </div>
                 </div>
@@ -76,7 +83,8 @@
                         <i class="fas fa-clock text-orange-500 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Asignaciones Pendientes</p>
+                        <p class="text-sm text-gray-600" th:text="#{admin.dashboard.pendingAssignments}">Asignaciones
+                            Pendientes</p>
                         <p class="text-2xl font-bold text-gray-900" th:text="${asignacionesPendientes ?: 0}">0</p>
                     </div>
                 </div>
@@ -85,28 +93,32 @@
 
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Acciones Rápidas</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="#{admin.dashboard.quickActions}">Acciones Rápidas
+            </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Added real form actions for creating tournaments and matches -->
                 <a href="/admin/crear-torneo"
                     class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-left transition-colors block">
                     <i class="fas fa-plus-circle text-2xl mb-2"></i>
-                    <h3 class="font-bold">Crear Torneo</h3>
-                    <p class="text-sm opacity-90">Nuevo torneo de baloncesto</p>
+                    <h3 class="font-bold" th:text="#{admin.dashboard.createTournament}">Crear Torneo</h3>
+                    <p class="text-sm opacity-90" th:text="#{admin.dashboard.quickActions.createTournamentDesc}">Nuevo
+                        torneo de baloncesto</p>
                 </a>
 
                 <a href="/admin/crear-partido"
                     class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-left transition-colors block">
                     <i class="fas fa-calendar-plus text-2xl mb-2"></i>
-                    <h3 class="font-bold">Programar Partido</h3>
-                    <p class="text-sm opacity-90">Añadir nuevo partido</p>
+                    <h3 class="font-bold" th:text="#{admin.dashboard.scheduleMatch}">Programar Partido</h3>
+                    <p class="text-sm opacity-90" th:text="#{admin.dashboard.quickActions.scheduleMatchDesc}">Añadir
+                        nuevo partido</p>
                 </a>
 
                 <a href="/admin/arbitros"
                     class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg text-left transition-colors block">
                     <i class="fas fa-user-plus text-2xl mb-2"></i>
-                    <h3 class="font-bold">Gestionar Árbitros</h3>
-                    <p class="text-sm opacity-90">Ver y asignar árbitros</p>
+                    <h3 class="font-bold" th:text="#{admin.dashboard.manageReferees}">Gestionar Árbitros</h3>
+                    <p class="text-sm opacity-90" th:text="#{admin.dashboard.quickActions.manageRefereesDesc}">Ver y
+                        asignar árbitros</p>
                 </a>
             </div>
         </div>
@@ -114,8 +126,10 @@
         <!-- Recent Matches -->
         <div class="bg-white rounded-lg shadow-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-900">Partidos Recientes</h2>
-                <a href="/admin/partidos" class="text-blue-500 hover:text-blue-700 font-medium">Ver todos</a>
+                <h2 class="text-xl font-bold text-gray-900" th:text="#{admin.dashboard.recentMatches}">Partidos
+                    Recientes</h2>
+                <a href="/admin/partidos" class="text-blue-500 hover:text-blue-700 font-medium"
+                    th:text="#{admin.viewAll}">Ver todos</a>
             </div>
 
             <!-- Updated to use real partido data from backend -->
@@ -133,13 +147,14 @@
                                 <div class="flex items-center text-sm text-gray-600 mt-1">
                                     <i class="fas fa-clock mr-1"></i>
                                     <span>
-                                        <span th:text="${partido.fecha != null} ? ${#temporals.format(partido.fecha, 'dd/MM/yyyy')} : ''"></span>
+                                        <span
+                                            th:text="${partido.fecha != null} ? ${#temporals.format(partido.fecha, 'dd/MM/yyyy')} : ''"></span>
                                         [[${partido.hora}]]
                                     </span>
                                     <span class="mx-2">•</span>
                                     <i class="fas fa-users mr-1"></i>
                                     <span
-                                        th:text="${partido.asignaciones != null ? partido.asignaciones.size() : 0} + ' árbitros asignados'">0
+                                        th:text="#{admin.matches.assignedReferees(${partido.asignaciones != null ? partido.asignaciones.size() : 0})}">0
                                         árbitros asignados</span>
                                 </div>
                             </div>
@@ -148,11 +163,11 @@
                             <!-- Dynamic status based on assignment completion -->
                             <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 3}"
                                 class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                                Confirmado
+                                <span th:text="#{admin.matches.confirmed}">Confirmado</span>
                             </span>
                             <span th:if="${partido.asignaciones == null or partido.asignaciones.size() < 3}"
                                 class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                                Pendiente
+                                <span th:text="#{admin.matches.pending}">Pendiente</span>
                             </span>
                             <!-- Botón de opciones (tres puntitos) eliminado a petición del usuario -->
                         </div>
@@ -163,16 +178,18 @@
             <!-- Added empty state when no matches exist -->
             <div th:if="${partidos == null or partidos.empty}" class="text-center py-8">
                 <i class="fas fa-calendar-times text-gray-300 text-4xl mb-4"></i>
-                <p class="text-gray-500">No hay partidos programados</p>
-                <a href="/admin/crear-partido.html" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer
+                <p class="text-gray-500" th:text="#{admin.dashboard.noMatches}">No hay partidos programados</p>
+                <a href="/admin/crear-partido.html" class="text-blue-500 hover:text-blue-700 font-medium"
+                    th:text="#{admin.dashboard.createFirstMatch}">Crear primer
                     partido</a>
             </div>
 
             <!-- Tournaments Section -->
             <div class="bg-white rounded-lg shadow-sm p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-900">Torneos</h2>
-                    <a href="/admin/crear-torneo" class="text-blue-500 hover:text-blue-700 font-medium">Crear torneo</a>
+                    <h2 class="text-xl font-bold text-gray-900" th:text="#{admin.dashboard.tournaments}">Torneos</h2>
+                    <a href="/admin/crear-torneo" class="text-blue-500 hover:text-blue-700 font-medium"
+                        th:text="#{admin.dashboard.createTournamentLink}">Crear torneo</a>
                 </div>
 
                 <div class="space-y-4" th:if="${torneos != null and !torneos.empty}">
@@ -183,27 +200,33 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-4">
                                     <div>
-                                        <h3 class="font-bold text-gray-900" th:text="${torneo.nombre}">Nombre del Torneo</h3>
+                                        <h3 class="font-bold text-gray-900" th:text="${torneo.nombre}">Nombre del Torneo
+                                        </h3>
                                         <div class="flex items-center text-sm text-gray-600 mt-1">
                                             <i class="fas fa-calendar mr-1"></i>
-                                            <span th:text="${#temporals.format(torneo.fechaInicio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(torneo.fechaFin, 'dd/MM/yyyy')}">Fechas</span>
+                                            <span
+                                                th:text="${#temporals.format(torneo.fechaInicio, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(torneo.fechaFin, 'dd/MM/yyyy')}">Fechas</span>
                                             <span class="mx-2">•</span>
                                             <i class="fas fa-basketball-ball mr-1"></i>
-                                            <span th:text="${torneo.partidos != null ? torneo.partidos.size() : 0} + ' partidos'">0 partidos</span>
+                                            <span
+                                                th:text="${torneo.partidos != null ? torneo.partidos.size() : 0} + ' partidos'">0
+                                                partidos</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span th:if="${torneo.fechaFin != null and torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
+                                    <span
+                                        th:if="${torneo.fechaFin != null and torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
                                         class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
-                                        Finalizado
+                                        <span th:text="#{admin.status.finished}">Finalizado</span>
                                     </span>
-                                    <span th:if="${torneo.fechaFin != null and !torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
+                                    <span
+                                        th:if="${torneo.fechaFin != null and !torneo.fechaFin.isBefore(T(java.time.LocalDate).now())}"
                                         class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                                        Activo
+                                        <span th:text="#{admin.status.active}">Activo</span>
                                     </span>
                                     <i class="fas fa-chevron-down text-gray-400 transform transition-transform"
-                                    th:id="'chevron-' + ${torneo.id}"></i>
+                                        th:id="'chevron-' + ${torneo.id}"></i>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +234,9 @@
                         <!-- Tournament Matches (Hidden by default) -->
                         <div class="border-t bg-gray-50 hidden" th:id="'partidos-' + ${torneo.id}">
                             <div class="p-4">
-                                <h4 class="font-medium text-gray-900 mb-3">Partidos del Torneo</h4>
+                                <h4 class="font-medium text-gray-900 mb-3"
+                                    th:text="#{admin.dashboard.tournamentMatches}">Partidos
+                                    del Torneo</h4>
                                 <div class="space-y-3" th:if="${torneo.partidos != null and !torneo.partidos.empty}">
                                     <div class="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow"
                                         th:each="partido : ${torneo.partidos}">
@@ -224,29 +249,36 @@
                                                     </div>
                                                     <div class="flex items-center text-sm text-gray-600 mt-1">
                                                         <i class="fas fa-clock mr-1"></i>
-                                                        <span th:text="${#temporals.format(partido.fecha, 'dd/MM/yyyy')} + ' - ' + ${partido.hora}">Fecha y hora</span>
+                                                        <span
+                                                            th:text="${#temporals.format(partido.fecha, 'dd/MM/yyyy')} + ' - ' + ${partido.hora}">Fecha
+                                                            y hora</span>
                                                         <span class="mx-2">•</span>
                                                         <i class="fas fa-users mr-1"></i>
-                                                        <span th:text="${partido.asignaciones != null ? partido.asignaciones.size() : 0} + '/4 árbitros'">0/4 árbitros</span>
+                                                        <span
+                                                            th:text="#{admin.matches.assignedCount(${partido.asignaciones != null ? partido.asignaciones.size() : 0}, 4)}">0/4
+                                                            árbitros</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <span th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 4}"
+                                                <span
+                                                    th:if="${partido.asignaciones != null and partido.asignaciones.size() >= 4}"
                                                     class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                                    Completo
+                                                    <span th:text="#{admin.status.complete}">Completo</span>
                                                 </span>
-                                                <span th:if="${partido.asignaciones != null and partido.asignaciones.size() > 0 and partido.asignaciones.size() < 4}" 
+                                                <span
+                                                    th:if="${partido.asignaciones != null and partido.asignaciones.size() > 0 and partido.asignaciones.size() < 4}"
                                                     class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
-                                                    Parcial
+                                                    <span th:text="#{admin.status.partial}">Parcial</span>
                                                 </span>
-                                                <span th:if="${partido.asignaciones == null or partido.asignaciones.size() == 0}"
+                                                <span
+                                                    th:if="${partido.asignaciones == null or partido.asignaciones.size() == 0}"
                                                     class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
-                                                    Sin asignar
+                                                    <span th:text="#{admin.status.unassigned}">Sin asignar</span>
                                                 </span>
                                                 <a th:href="@{/admin/arbitros}"
                                                     class="text-blue-500 hover:text-blue-700 text-sm font-medium">
-                                                    Gestionar
+                                                    <span th:text="#{admin.manage}">Gestionar</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -256,10 +288,11 @@
                                 <div th:if="${torneo.partidos == null or torneo.partidos.empty}"
                                     class="text-center py-6">
                                     <i class="fas fa-calendar-plus text-gray-300 text-2xl mb-2"></i>
-                                    <p class="text-gray-500 text-sm">No hay partidos programados</p>
+                                    <p class="text-gray-500 text-sm" th:text="#{admin.dashboard.noMatches}">No hay
+                                        partidos programados</p>
                                     <a th:href="@{/admin/partidos/crear?torneo={id}(id=${torneo.id})}"
-                                    class="text-blue-500 hover:text-blue-700 text-sm font-medium">
-                                        Programar primer partido
+                                        class="text-blue-500 hover:text-blue-700 text-sm font-medium">
+                                        <span th:text="#{admin.dashboard.createFirstMatch}">Crear primer partido</span>
                                     </a>
                                 </div>
                             </div>
@@ -269,8 +302,9 @@
 
                 <div th:if="${torneos == null or torneos.empty}" class="text-center py-8">
                     <i class="fas fa-trophy text-gray-300 text-4xl mb-4"></i>
-                    <p class="text-gray-500">No hay torneos creados</p>
-                    <a href="/admin/crear-torneo" class="text-blue-500 hover:text-blue-700 font-medium">Crear primer torneo</a>
+                    <p class="text-gray-500" th:text="#{admin.dashboard.noTournaments}">No hay torneos creados</p>
+                    <a href="/admin/crear-torneo" class="text-blue-500 hover:text-blue-700 font-medium"
+                        th:text="#{admin.dashboard.createFirstTournament}">Crear primer torneo</a>
                 </div>
             </div>
         </div>
@@ -290,7 +324,7 @@
                 }
             }
         </script>
-        </div>
+    </div>
     </div>
 </body>
 
