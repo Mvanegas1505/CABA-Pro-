@@ -6,12 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.CABA.CabaPro.dto.RegistroArbitroDTO;
 import com.CABA.CabaPro.model.Usuario;
 import com.CABA.CabaPro.service.UsuarioService;
-
-import jakarta.servlet.http.HttpSession;
-
-import com.CABA.CabaPro.dto.RegistroArbitroDTO;
 
 @Controller
 
@@ -36,6 +33,7 @@ public class UsuarioController {
             // Verificar si el correo ya existe
             if (usuarioService.findByCorreo(registroArbitroDTO.getCorreo()) != null) {
                 model.addAttribute("error", "El correo ya está registrado. Por favor usa otro correo.");
+                model.addAttribute("registroArbitroDTO", registroArbitroDTO);
                 return "user/registro";
             }
             Usuario usuario = new Usuario();
@@ -49,6 +47,7 @@ public class UsuarioController {
             return "redirect:/perfil?correo=" + usuario.getCorreo();
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("registroArbitroDTO", registroArbitroDTO);
             return "user/registro";
         }
     }

@@ -35,6 +35,9 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     public Usuario findByCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo).orElse(null);
     }
@@ -57,9 +60,26 @@ public class UsuarioService {
             throw new Exception("La contraseña no puede estar vacía ni contener solo espacios");
         }
 
+        // Validación mínima de longitud
+        if (contrasena.length() < 8) {
+            throw new Exception("La contraseña debe tener al menos 8 caracteres");
+        }
+
+        // Política de complejidad: al menos una mayúscula, una minúscula y un carácter especial
+        if (!contrasena.matches(".*[A-Z].*")) {
+            throw new Exception("La contraseña debe contener al menos una letra mayúscula");
+        }
+        if (!contrasena.matches(".*[a-z].*")) {
+            throw new Exception("La contraseña debe contener al menos una letra minúscula");
+        }
+        if (!contrasena.matches(".*[^A-Za-z0-9].*")) {
+            throw new Exception("La contraseña debe contener al menos un carácter especial");
+        }
+
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
-        usuario.setContrasena(contrasena);
+        // Encriptar la contraseña antes de guardar
+        usuario.setContrasena(passwordEncoder.encode(contrasena));
         usuario.setCorreo(correo);
         usuario.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
         return usuarioRepository.save(usuario);
@@ -69,7 +89,7 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            if (usuario.getContrasena().equals(contrasena)) {
+            if (passwordEncoder.matches(contrasena, usuario.getContrasena())) {
                 return usuario;
             } else {
                 throw new Exception("Contraseña incorrecta");
@@ -82,10 +102,27 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            if (!usuario.getContrasena().equals(contrasenaAntigua)) {
+            if (!passwordEncoder.matches(contrasenaAntigua, usuario.getContrasena())) {
                 throw new Exception("La contraseña antigua es incorrecta");
             }
-            usuario.setContrasena(contrasenaNueva);
+            // Validar nueva contraseña según la misma política
+            if (contrasenaNueva == null || contrasenaNueva.trim().isEmpty()) {
+                throw new Exception("La contraseña nueva no puede estar vacía");
+            }
+            if (contrasenaNueva.length() < 8) {
+                throw new Exception("La contraseña debe tener al menos 8 caracteres");
+            }
+            if (!contrasenaNueva.matches(".*[A-Z].*")) {
+                throw new Exception("La contraseña debe contener al menos una letra mayúscula");
+            }
+            if (!contrasenaNueva.matches(".*[a-z].*")) {
+                throw new Exception("La contraseña debe contener al menos una letra minúscula");
+            }
+            if (!contrasenaNueva.matches(".*[^A-Za-z0-9].*")) {
+                throw new Exception("La contraseña debe contener al menos un carácter especial");
+            }
+
+            usuario.setContrasena(passwordEncoder.encode(contrasenaNueva));
             usuarioRepository.save(usuario);
             return true;
         }
