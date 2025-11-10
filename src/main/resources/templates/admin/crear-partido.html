@@ -149,7 +149,7 @@
                 if(!address){ alert('Por favor ingresa una dirección o lugar para verificar.'); return; }
                 if(!mapboxToken){ alert('Mapbox token no configurado. Contacta al administrador.'); return; }
                 var q = encodeURIComponent(address);
-                var url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + q + '.json?access_token=' + mapboxToken + '&limit=1&language=es&types=address,poi';
+                var url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + q + '.json?access_token=' + mapboxToken + '&limit=1&language=es&country=co&types=address,poi';
                 fetch(url).then(function(r){ return r.json(); }).then(function(data){
                     console.log('Mapbox suggestion for', address, data);
                     if(data && data.features && data.features.length>0){
