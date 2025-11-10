@@ -47,6 +47,16 @@ public class Partido {
     private String lugar;
 
     /**
+     * Latitud de la ubicación (opcional, calculada por geocoding)
+     */
+    private Double latitude;
+
+    /**
+     * Longitud de la ubicación (opcional, calculada por geocoding)
+     */
+    private Double longitude;
+
+    /**
      * Torneo al que pertenece el partido.
      */
     @ManyToOne
@@ -140,6 +150,22 @@ public class Partido {
      */
     public void setLugar(String lugar) {
         this.lugar = lugar;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     /**
