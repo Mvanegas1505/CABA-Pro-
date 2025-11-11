@@ -227,6 +227,11 @@
                                     </span>
                                     <i class="fas fa-chevron-down text-gray-400 transform transition-transform"
                                         th:id="'chevron-' + ${torneo.id}"></i>
+                                    <button type="button" th:attr="data-id=${torneo.id}"
+                                        class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-colors ml-2"
+                                        onclick="deleteTorneo(this)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -322,6 +327,23 @@
                     partidosDiv.classList.add('hidden');
                     chevron.classList.remove('rotate-180');
                 }
+            }
+
+            function deleteTorneo(btn) {
+                const id = btn.getAttribute('data-id');
+                if (!id) return alert('ID de torneo no encontrado');
+                if (!confirm('¿Deseas eliminar este torneo? Esta acción eliminará también sus partidos.')) return;
+                fetch('/admin/torneos/' + id, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json && json.success) {
+                            // simple UX: reload to reflect changes
+                            location.reload();
+                        } else {
+                            alert('Error al eliminar torneo: ' + (json && json.message ? json.message : ''));
+                        }
+                    })
+                    .catch(err => alert('Error de red: ' + err));
             }
         </script>
     </div>
