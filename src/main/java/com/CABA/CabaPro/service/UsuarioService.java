@@ -20,13 +20,18 @@ public class UsuarioService {
     }
         // Devuelve todos los usuarios con rol ARBITRO
         public List<Usuario> getArbitros() {
-            return usuarioRepository.findAll().stream()
-                    .filter(u -> u.getRol() != null && u.getRol().name().equals("ARBITRO"))
-                    .toList();
+            // Prefer repository query by role; fallback to filtering if method not available
+            try {
+                return usuarioRepository.findByRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
+            } catch (Exception ex) {
+                return usuarioRepository.findAll().stream()
+                        .filter(u -> u.getRol() != null && u.getRol().name().equals("ARBITRO"))
+                        .toList();
+            }
         }
 
-        // Devuelve un usuario por su ID
-        public Optional<Usuario> getUsuarioById(Long id) {
+        // Devuelve un usuario por su ID (correo)
+        public Optional<Usuario> getUsuarioById(String id) {
             return usuarioRepository.findById(id);
         }
 
