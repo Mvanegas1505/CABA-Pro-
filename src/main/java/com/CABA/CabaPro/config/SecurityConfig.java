@@ -121,24 +121,31 @@ public class SecurityConfig {
     public SecurityFilterChain webFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider,
             AuthenticationSuccessHandler successHandler) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authenticationProvider(authenticationProvider)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/css/**",
-                                "/js/**",
-                                "/img/**",
-                                "/h2-console/**",
-                                "/login",
-                                "/registro",
-                                "/perfil",
-                                "/",
-                                "/home",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html")
-                        .permitAll()
-                        .anyRequest().authenticated())
+        .csrf(csrf -> csrf.disable())
+        .authenticationProvider(authenticationProvider)
+        .authorizeHttpRequests(authorize -> authorize
+            // Admin-only diagnostic/migration endpoints
+            .requestMatchers(
+                "/admin/api/arbitros",
+                "/admin/api/usuarios",
+                "/admin/api/migrate-arbitros")
+            .hasRole("ADMIN")
+            // Static and public endpoints
+            .requestMatchers(
+                "/css/**",
+                "/js/**",
+                "/img/**",
+                "/h2-console/**",
+                "/login",
+                "/registro",
+                "/perfil",
+                "/",
+                "/home",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html")
+            .permitAll()
+            .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")

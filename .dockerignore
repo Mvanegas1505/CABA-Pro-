@@ -1,0 +1,17 @@
+# Ignore Maven target
+target
+
+# IDE files
+.vscode
+.idea
+*.iml
+
+# Git
+.git
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local data (we will mount ./data explicitly)
+data/
