@@ -1,5 +1,20 @@
 package com.CABA.CabaPro.controller;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.CABA.CabaPro.model.Asignacion;
 import com.CABA.CabaPro.model.EspecialidadEnum;
 import com.CABA.CabaPro.model.EstadoAsignacionEnum;
@@ -10,20 +25,6 @@ import com.CABA.CabaPro.service.AsignacionService;
 import com.CABA.CabaPro.service.PartidoService;
 import com.CABA.CabaPro.service.TorneoService;
 import com.CABA.CabaPro.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -56,6 +57,9 @@ public class AdminController {
 
     @Autowired
     private TorneoService torneoService;
+
+    @Autowired
+    private javax.sql.DataSource dataSource;
 
     // ==============================================
     // Asignar árbitro a un partido
@@ -208,5 +212,96 @@ public class AdminController {
         model.addAttribute("arbitrosDisponiblesPorPartido", arbitrosDisponiblesPorPartido);
 
         return "admin/gestionar-arbitros";
+    }
+
+    // Endpoint de diagnóstico: devuelve JSON con árbitros (correo, nombre, rol, especialidad, escalafon)
+    @GetMapping("/admin/api/arbitros")
+    @ResponseBody
+    public java.util.List<java.util.Map<String, Object>> apiArbitros() {
+        java.util.List<Usuario> arbitros = usuarioService.getArbitros();
+        return arbitros.stream().map(u -> {
+            java.util.Map<String, Object> m = new java.util.HashMap<>();
+            m.put("correo", u.getCorreo());
+            m.put("nombre", u.getNombre());
+            m.put("rol", u.getRol() != null ? u.getRol().name() : null);
+            m.put("especialidad", u.getEspecialidad());
+            m.put("escalafon", u.getEscalafon());
+            return m;
+        }).toList();
+    }
+
+    // Endpoint de diagnóstico: devuelve TODOS los usuarios (correo, nombre, rol, especialidad, escalafon)
+    @GetMapping("/admin/api/usuarios")
+    @ResponseBody
+    public java.util.List<java.util.Map<String, Object>> apiUsuarios() {
+        java.util.List<Usuario> usuarios = usuarioService.getAllUsuarios();
+        return usuarios.stream().map(u -> {
+            java.util.Map<String, Object> m = new java.util.HashMap<>();
+            m.put("correo", u.getCorreo());
+            m.put("nombre", u.getNombre());
+            m.put("rol", u.getRol() != null ? u.getRol().name() : null);
+            m.put("especialidad", u.getEspecialidad());
+            m.put("escalafon", u.getEscalafon());
+            return m;
+        }).toList();
+    }
+
+    // Temporary migration endpoint: backup DB files and mark users as ARBITRO when they have
+    // especialidad or escalafon but no role set. This is a one-click, non-destructive migration
+    // (creates backups). Call only once and remove after use.
+    @PostMapping("/admin/api/migrate-arbitros")
+    @ResponseBody
+    public java.util.Map<String, Object> migrateArbitros() {
+        java.util.Map<String, Object> resp = new java.util.HashMap<>();
+        java.util.List<String> backups = new java.util.ArrayList<>();
+        java.util.List<String> updated = new java.util.ArrayList<>();
+
+        // Create SQL script backup using H2 SCRIPT command via existing DataSource connection
+        try {
+            java.nio.file.Path cwd = java.nio.file.Paths.get(System.getProperty("user.dir"));
+            java.nio.file.Path backupDir = cwd.resolve("data-backups");
+            if (!java.nio.file.Files.exists(backupDir)) {
+                java.nio.file.Files.createDirectories(backupDir);
+            }
+            String time = java.time.LocalDateTime.now().toString().replace(':', '-');
+            java.nio.file.Path scriptFile = backupDir.resolve("testdb.script." + time + ".sql");
+
+            try (java.sql.Connection conn = dataSource.getConnection(); java.sql.Statement st = conn.createStatement()) {
+                // H2 supports: SCRIPT TO 'filename'
+                String sql = "SCRIPT TO '" + scriptFile.toString().replace("\\", "/") + "'";
+                st.execute(sql);
+                backups.add(scriptFile.toString());
+            }
+        } catch (Exception e) {
+            resp.put("success", false);
+            resp.put("message", "Error creating SQL script backup: " + e.getMessage());
+            return resp;
+        }
+
+        // Perform migration using usuarioService
+        try {
+            java.util.List<Usuario> usuarios = usuarioService.getAllUsuarios();
+            for (Usuario u : usuarios) {
+                boolean hasEspecialidad = u.getEspecialidad() != null && !u.getEspecialidad().trim().isEmpty();
+                boolean hasEscalafon = u.getEscalafon() != null && !u.getEscalafon().trim().isEmpty();
+                boolean isArbitro = u.getRol() != null && u.getRol().name().equals("ARBITRO");
+                if ((hasEspecialidad || hasEscalafon) && !isArbitro) {
+                    u.setRol(com.CABA.CabaPro.model.RolEnum.ARBITRO);
+                    usuarioService.guardar(u);
+                    updated.add(u.getCorreo());
+                }
+            }
+        } catch (Exception e) {
+            resp.put("success", false);
+            resp.put("message", "Error during migration: " + e.getMessage());
+            resp.put("backups", backups);
+            return resp;
+        }
+
+        resp.put("success", true);
+        resp.put("backups", backups);
+        resp.put("updatedCount", updated.size());
+        resp.put("updated", updated);
+        return resp;
     }
 }
